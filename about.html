@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About The American West</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .about-hero {
+            min-height: 50vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-hero p {
+            color: var(--parchment);
+            font-size: 1.3rem;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .about-content {
+            padding: 80px 0;
+            background: var(--parchment);
+        }
+
+        .about-section {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .about-section h2 {
+            font-size: 2.2rem;
+            color: var(--leather-brown);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+            display: inline-block;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 20px;
+            color: var(--dark-wood);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .info-card {
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
+            padding: 30px;
+            box-shadow: 5px 5px 0 rgba(139, 69, 19, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            color: var(--rust-red);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .stat-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin: 50px 0;
+            padding: 40px;
+            background: var(--dark-wood);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Rye', cursive;
+            font-size: 3rem;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--cream);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 35px;
+            background: var(--leather-brown);
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'Rye', cursive;
+            border: 3px solid var(--gold);
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 var(--dark-wood);
+        }
+
+        .back-link:hover {
+            background: var(--gold);
+            color: var(--dark-wood);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--dark-wood);
+        }
+
+        .regions-section {
+            background: var(--cream);
+            padding: 60px 0;
+        }
+
+        .region-item {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--parchment);
+            border-left: 5px solid var(--gold);
+        }
+
+        .region-item:nth-child(even) {
+            border-left: none;
+            border-right: 5px solid var(--gold);
+            flex-direction: row-reverse;
+        }
+
+        .region-icon {
+            font-size: 3rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .region-info h3 {
+            font-size: 1.5rem;
+            color: var(--leather-brown);
+            margin-bottom: 10px;
+        }
+
+        .region-info p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .region-item,
+            .region-item:nth-child(even) {
+                flex-direction: column;
+                text-align: center;
+                border-left: none;
+                border-right: none;
+                border-top: 5px solid var(--gold);
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#timeline">Timeline</a></li>
+                <li><a href="index.html#legends">Legends</a></li>
+                <li><a href="index.html#gallery">Gallery</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="about-hero">
+        <div class="container">
+            <h1>The American West</h1>
+            <p>A Land of Dreams, Danger, and Destiny</p>
+        </div>
+    </section>
+
+    <main class="about-content">
+        <div class="about-section">
+            <h2>What Was the American West?</h2>
+            <p>The American West, often called the "Wild West" or the "Old West," refers to the history, geography, and folklore of the western United States during the 19th century, particularly from the 1860s to the 1890s. This era began after the Civil War and ended around the time the U.S. Census Bureau declared the frontier "closed" in 1890.</p>
+            <p>The West represented the promise of a new beginning - a place where anyone could reinvent themselves, strike it rich, or carve out a homestead from the wilderness. It was a land of vast prairies, towering mountains, scorching deserts, and endless opportunity.</p>
+            <p>But the West was also a place of conflict and hardship. Native American tribes fought to preserve their ancestral lands. Outlaws roamed the territories. Settlers faced drought, disease, and isolation. The reality of western life was often far harsher than the legends suggest.</p>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-item">
+                <span class="stat-number">1803-1890</span>
+                <span class="stat-label">The Frontier Era</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">2.5M+</span>
+                <span class="stat-label">Square Miles Settled</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Native Tribes Affected</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10M+</span>
+                <span class="stat-label">Settlers Moved West</span>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Key Themes of the West</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Manifest Destiny</h3>
+                    <p>The 19th-century belief that American settlers were destined to expand across North America. This ideology drove westward expansion but came at a tremendous cost to Native peoples.</p>
+                </div>
+                <div class="info-card">
+                    <h3>The Gold Rush</h3>
+                    <p>The discovery of gold in California (1848) and other territories sparked massive migrations. Boomtowns rose and fell overnight as prospectors chased their fortunes.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Cowboys & Cattle</h3>
+                    <p>The cattle industry shaped the West. Cowboys drove millions of longhorns along trails like the Chisholm Trail, creating an enduring symbol of American identity.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Law & Outlaws</h3>
+                    <p>The frontier was often lawless. Legendary figures like Jesse James, Billy the Kid, and Butch Cassidy became infamous, while lawmen like Wyatt Earp tried to bring order.</p>
+                </div>
+                <div class="info-card">
+                    <h3>The Railroad</h3>
+                    <p>The Transcontinental Railroad (completed 1869) transformed the West, connecting coasts, enabling commerce, and forever changing the landscape and its peoples.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Native Resistance</h3>
+                    <p>Indigenous peoples fought to protect their lands and ways of life. Leaders like Sitting Bull, Crazy Horse, and Geronimo led resistance against American expansion.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="regions-section">
+            <div class="about-section">
+                <h2>Regions of the West</h2>
+
+                <div class="region-item">
+                    <div class="region-icon">&#127796;</div>
+                    <div class="region-info">
+                        <h3>The Great Plains</h3>
+                        <p>Vast grasslands stretching from Texas to Canada. Home to millions of buffalo and the Lakota, Cheyenne, and Comanche peoples. Settlers transformed the plains into farmland through the Homestead Act.</p>
+                    </div>
+                </div>
+
+                <div class="region-item">
+                    <div class="region-icon">&#9968;</div>
+                    <div class="region-info">
+                        <h3>The Rocky Mountains</h3>
+                        <p>The backbone of the continent, rich in gold, silver, and copper. Mining towns like Denver, Leadville, and Virginia City sprang up in these rugged peaks.</p>
+                    </div>
+                </div>
+
+                <div class="region-item">
+                    <div class="region-icon">&#127797;</div>
+                    <div class="region-info">
+                        <h3>The Southwest Desert</h3>
+                        <p>A harsh but beautiful land of mesas, canyons, and desert. Home to the Apache, Navajo, and Pueblo peoples. Sites like the Grand Canyon and Monument Valley define this iconic landscape.</p>
+                    </div>
+                </div>
+
+                <div class="region-item">
+                    <div class="region-icon">&#127794;</div>
+                    <div class="region-info">
+                        <h3>The Pacific Coast</h3>
+                        <p>The final destination for many pioneers traveling the Oregon Trail. California's Gold Rush made it the most sought-after destination, while Oregon offered fertile farmland.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="about-section" style="text-align: center;">
+            <h2>The Legacy Lives On</h2>
+            <p>The American West left an indelible mark on the nation's identity. Its stories of courage, conflict, and adventure continue to captivate us through books, films, and folklore. The landscape itself - preserved in national parks and monuments - stands as a testament to this transformative era.</p>
+            <p>Understanding the West means grappling with both its heroism and its tragedies, its myths and its realities. It remains one of the most fascinating chapters in American history.</p>
+            <a href="index.html" class="back-link">&#8592; Back to Timeline</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 The American West. Educational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

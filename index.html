@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The American West - A Journey Through Time</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar">
+            <a href="about.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#timeline">Timeline</a></li>
+                <li><a href="#legends">Legends</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h1>The Wild West</h1>
+            <p class="tagline">Where Legends Were Born & History Was Made</p>
+            <a href="#timeline" class="cta-btn">Explore the Timeline</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>&#8595;</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="intro" class="intro-section">
+            <div class="container">
+                <h2>The Era That Shaped America</h2>
+                <p>From the Louisiana Purchase to the closing of the frontier, the American West was a land of opportunity, danger, and transformation. Cowboys, outlaws, Native Americans, and pioneers all played their part in one of history's greatest adventures.</p>
+            </div>
+        </section>
+
+        <section id="timeline" class="timeline-section">
+            <div class="container">
+                <h2>Journey Through Time</h2>
+                <p class="section-subtitle">Click on any event to learn more</p>
+
+                <div class="timeline-controls">
+                    <button class="filter-btn active" data-filter="all">All Events</button>
+                    <button class="filter-btn" data-filter="exploration">Exploration</button>
+                    <button class="filter-btn" data-filter="conflict">Conflicts</button>
+                    <button class="filter-btn" data-filter="expansion">Expansion</button>
+                    <button class="filter-btn" data-filter="culture">Culture</button>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item" data-category="exploration" data-year="1803">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1803</span>
+                            <h3>Louisiana Purchase</h3>
+                            <p class="preview">The United States doubles in size...</p>
+                            <div class="expanded-content">
+                                <img src="purchase.png" alt="Louisiana Purchase Map" class="timeline-image">
+                                <p>President Thomas Jefferson purchases 828,000 square miles of territory from France for $15 million, doubling the size of the young nation and opening the West for exploration and settlement.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Cost: $15 million</span>
+                                    <span class="detail-tag">Size: 828,000 sq mi</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="exploration" data-year="1804">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1804-1806</span>
+                            <h3>Lewis & Clark Expedition</h3>
+                            <p class="preview">The Corps of Discovery sets out...</p>
+                            <div class="expanded-content">
+                                <img src="lweis-clark.png" alt="Lewis and Clark Expedition" class="timeline-image">
+                                <p>Meriwether Lewis and William Clark lead the Corps of Discovery on a daring expedition to explore the newly acquired Louisiana Territory and find a route to the Pacific Ocean. Guided by Sacagawea, they traveled over 8,000 miles.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Distance: 8,000+ miles</span>
+                                    <span class="detail-tag">Duration: 2 years</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="expansion" data-year="1836">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1836</span>
+                            <h3>The Alamo</h3>
+                            <p class="preview">Remember the Alamo...</p>
+                            <div class="expanded-content">
+                                <p>A pivotal battle in the Texas Revolution where approximately 200 Texan defenders held the Alamo mission against thousands of Mexican troops for 13 days. Though they were defeated, their sacrifice rallied the Texan cause.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Defenders: ~200</span>
+                                    <span class="detail-tag">Duration: 13 days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="expansion" data-year="1848">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1848</span>
+                            <h3>California Gold Rush</h3>
+                            <p class="preview">Gold discovered at Sutter's Mill...</p>
+                            <div class="expanded-content">
+                                <p>James W. Marshall discovers gold at Sutter's Mill in Coloma, California, sparking one of the largest mass migrations in history. Over 300,000 people flocked to California, transforming the region forever.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Migrants: 300,000+</span>
+                                    <span class="detail-tag">"Forty-Niners"</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="expansion" data-year="1862">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1862</span>
+                            <h3>Homestead Act</h3>
+                            <p class="preview">Free land for settlers...</p>
+                            <div class="expanded-content">
+                                <p>President Lincoln signs the Homestead Act, offering 160 acres of public land to settlers who would farm it for five years. This act brought millions of settlers westward and transformed the Great Plains.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Land: 160 acres free</span>
+                                    <span class="detail-tag">Requirement: 5 years</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="expansion" data-year="1869">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1869</span>
+                            <h3>Transcontinental Railroad</h3>
+                            <p class="preview">East meets West at Promontory Summit...</p>
+                            <div class="expanded-content">
+                                <p>The Central Pacific and Union Pacific railroads meet at Promontory Summit, Utah, completing the first transcontinental railroad. The "Golden Spike" ceremony marks a new era of western expansion and commerce.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Length: 1,912 miles</span>
+                                    <span class="detail-tag">Workers: 20,000+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="conflict" data-year="1876">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1876</span>
+                            <h3>Battle of Little Bighorn</h3>
+                            <p class="preview">Custer's Last Stand...</p>
+                            <div class="expanded-content">
+                                <p>Lieutenant Colonel George Custer and his 7th Cavalry are defeated by Lakota Sioux and Cheyenne warriors led by Sitting Bull and Crazy Horse. This battle marked the height of Native American resistance to westward expansion.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">US Casualties: 268</span>
+                                    <span class="detail-tag">Native Victory</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="culture" data-year="1881">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1881</span>
+                            <h3>Gunfight at the O.K. Corral</h3>
+                            <p class="preview">The most famous shootout in Western history...</p>
+                            <div class="expanded-content">
+                                <p>In Tombstone, Arizona, the Earp brothers and Doc Holliday face off against the Clanton-McLaury gang in a gunfight lasting only 30 seconds but becoming the most legendary moment in Old West folklore.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Duration: 30 seconds</span>
+                                    <span class="detail-tag">Shots fired: ~30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="culture" data-year="1883">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1883</span>
+                            <h3>Buffalo Bill's Wild West Show</h3>
+                            <p class="preview">The West comes to the world...</p>
+                            <div class="expanded-content">
+                                <p>William F. "Buffalo Bill" Cody launches his Wild West show, featuring cowboys, Native Americans, sharpshooter Annie Oakley, and recreations of famous battles. The show toured America and Europe for 30 years.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Years Active: 30</span>
+                                    <span class="detail-tag">Star: Annie Oakley</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="conflict" data-year="1890">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1890</span>
+                            <h3>Wounded Knee Massacre</h3>
+                            <p class="preview">The end of the Indian Wars...</p>
+                            <div class="expanded-content">
+                                <p>US Army troops kill over 250 Lakota men, women, and children at Wounded Knee Creek, South Dakota. This tragedy marked the effective end of Native American armed resistance and the Indian Wars.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Lakota Dead: 250+</span>
+                                    <span class="detail-tag">End of Indian Wars</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-category="expansion" data-year="1893">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="year">1893</span>
+                            <h3>Frontier Declared Closed</h3>
+                            <p class="preview">The end of an era...</p>
+                            <div class="expanded-content">
+                                <p>Historian Frederick Jackson Turner presents his "Frontier Thesis" at the Chicago World's Fair, declaring the American frontier officially closed. The era of westward expansion had come to an end.</p>
+                                <div class="event-details">
+                                    <span class="detail-tag">Turner Thesis</span>
+                                    <span class="detail-tag">End of Frontier</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="legends" class="legends-section">
+            <div class="container">
+                <h2>Legends of the West</h2>
+                <div class="legends-grid">
+                    <div class="legend-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="legend-icon">&#9733;</div>
+                                <h3>Billy the Kid</h3>
+                                <p>Outlaw</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Henry McCarty</h4>
+                                <p>1859-1881</p>
+                                <p>Legendary outlaw said to have killed 21 men. Shot by Sheriff Pat Garrett at age 21.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legend-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="legend-icon">&#9733;</div>
+                                <h3>Wyatt Earp</h3>
+                                <p>Lawman</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Wyatt Berry Stapp Earp</h4>
+                                <p>1848-1929</p>
+                                <p>Deputy sheriff, deputy marshal, and gambler. Best known for the Gunfight at the O.K. Corral.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legend-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="legend-icon">&#9733;</div>
+                                <h3>Calamity Jane</h3>
+                                <p>Frontierswoman</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Martha Jane Canary</h4>
+                                <p>1852-1903</p>
+                                <p>Sharpshooter, scout, and storyteller. Known for her adventures and wild exploits across the frontier.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legend-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="legend-icon">&#9733;</div>
+                                <h3>Sitting Bull</h3>
+                                <p>Lakota Leader</p>
+                            </div>
+                            <div class="card-back">
+                                <h4>Tatanka Iyotake</h4>
+                                <p>1831-1890</p>
+                                <p>Hunkpapa Lakota leader who led his people during years of resistance against US government policies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="gallery-section">
+            <div class="container">
+                <h2>Scenes from the Frontier</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-title="The Open Range">
+                        <div class="gallery-placeholder">
+                            <span>&#127796;</span>
+                            <p>Desert Landscape</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-title="Cattle Drive">
+                        <div class="gallery-placeholder">
+                            <span>&#128004;</span>
+                            <p>Cattle Drive</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-title="Mining Town">
+                        <div class="gallery-placeholder">
+                            <span>&#9935;</span>
+                            <p>Gold Mining</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-title="Native Camp">
+                        <div class="gallery-placeholder">
+                            <span>&#9978;</span>
+                            <p>Native Camp</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-title="Saloon">
+                        <div class="gallery-placeholder">
+                            <span>&#127866;</span>
+                            <p>Western Saloon</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-title="Stagecoach">
+                        <div class="gallery-placeholder">
+                            <span>&#128052;</span>
+                            <p>Stagecoach</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quote-section">
+            <div class="container">
+                <blockquote>
+                    "Go West, young man, and grow up with the country."
+                    <cite>— Horace Greeley</cite>
+                </blockquote>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 The American West. Educational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
