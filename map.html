@@ -8,8 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .map-hero {
-            min-height: 40vh;
-            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+            min-height: 35vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.9), rgba(139, 69, 19, 0.8)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="80" opacity="0.1">&#9733;</text></svg>'),
                         linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
             display: flex;
             align-items: center;
@@ -20,19 +21,33 @@
 
         .map-hero h1 {
             font-size: 3.5rem;
-            color: var(--cream);
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            color: var(--gold);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7),
+                         0 0 30px rgba(255, 215, 0, 0.3);
+            letter-spacing: 3px;
         }
 
         .map-hero p {
             color: var(--parchment);
             font-size: 1.2rem;
             margin-top: 15px;
+            font-style: italic;
         }
 
         .map-section {
             padding: 60px 0;
-            background: var(--parchment);
+            background: linear-gradient(135deg, #2c2416 0%, #3d2e1a 50%, #2c2416 100%);
+            position: relative;
+        }
+
+        .map-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
         }
 
         .map-container {
@@ -43,51 +58,124 @@
 
         .map-wrapper {
             position: relative;
-            background: var(--cream);
-            border: 4px solid var(--leather-brown);
-            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
-            padding: 20px;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 50px,
+                    rgba(139, 119, 101, 0.03) 50px,
+                    rgba(139, 119, 101, 0.03) 51px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 50px,
+                    rgba(139, 119, 101, 0.03) 50px,
+                    rgba(139, 119, 101, 0.03) 51px
+                ),
+                linear-gradient(135deg, #f4e4bc 0%, #e8d5a3 25%, #f2e2b8 50%, #e5d19a 75%, #f0deb0 100%);
+            border: 12px solid;
+            border-image: linear-gradient(135deg, #8B4513 0%, #654321 25%, #8B4513 50%, #654321 75%, #8B4513 100%) 1;
+            box-shadow:
+                0 0 0 4px var(--gold),
+                0 0 0 8px #654321,
+                8px 8px 20px rgba(0, 0, 0, 0.5),
+                inset 0 0 100px rgba(139, 69, 19, 0.1);
+            padding: 30px;
+            border-radius: 5px;
+        }
+
+        .map-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 0, 0, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .map-title-banner {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .map-title-banner h2 {
+            font-family: 'Rye', cursive;
+            font-size: 1.8rem;
+            color: #3d2e1a;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            letter-spacing: 4px;
+            margin: 0;
+        }
+
+        .map-title-banner::before,
+        .map-title-banner::after {
+            content: '~';
+            font-size: 2rem;
+            color: #8B4513;
+            padding: 0 15px;
+        }
+
+        .map-subtitle {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            color: #654321;
+            font-size: 0.95rem;
+            margin-top: 5px;
         }
 
         .map-svg {
             width: 100%;
             height: auto;
             display: block;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
         }
 
         .state {
-            fill: var(--desert-sand);
-            stroke: var(--leather-brown);
-            stroke-width: 1.5;
+            fill: url(#stateGradient);
+            stroke: #8B4513;
+            stroke-width: 2;
             cursor: pointer;
-            transition: fill 0.3s ease;
+            transition: all 0.3s ease;
+            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
         }
 
         .state:hover {
-            fill: var(--sunset-orange);
+            fill: url(#stateHoverGradient);
+            stroke: #654321;
+            stroke-width: 2.5;
         }
 
-        .state.active {
-            fill: var(--gold);
+        .state-label {
+            font-family: 'Rye', cursive;
+            font-size: 8px;
+            fill: #5c4a2a;
+            pointer-events: none;
+            text-anchor: middle;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
         }
 
         .marker {
             cursor: pointer;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
         }
 
         .marker circle {
-            transition: r 0.3s ease, stroke-width 0.3s ease;
+            transition: all 0.3s ease;
+            stroke: #f4e4bc;
+            stroke-width: 2;
         }
 
         .marker:hover circle {
-            r: 10;
+            r: 12;
             stroke-width: 3;
-        }
-
-        .marker circle {
-            fill: var(--rust-red);
-            stroke: var(--cream);
-            stroke-width: 2;
+            filter: brightness(1.2);
         }
 
         .marker.battle circle {
@@ -95,147 +183,247 @@
         }
 
         .marker.gold circle {
-            fill: var(--gold);
+            fill: #FFD700;
         }
 
         .marker.trail circle {
-            fill: var(--sage-green);
+            fill: #6B8E23;
         }
 
         .marker.town circle {
-            fill: var(--leather-brown);
+            fill: #8B4513;
+        }
+
+        .marker.event circle {
+            fill: #CD5C5C;
         }
 
         .marker-label {
             font-family: 'Lora', serif;
-            font-size: 10px;
-            fill: var(--dark-wood);
+            font-size: 9px;
+            fill: #3d2e1a;
             pointer-events: none;
+            font-weight: 600;
+            text-shadow:
+                -1px -1px 0 rgba(255, 255, 255, 0.8),
+                1px -1px 0 rgba(255, 255, 255, 0.8),
+                -1px 1px 0 rgba(255, 255, 255, 0.8),
+                1px 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .river {
+            fill: none;
+            stroke: #6B9AC4;
+            stroke-width: 2.5;
+            opacity: 0.6;
+            stroke-linecap: round;
+        }
+
+        .river-label {
+            font-family: 'Lora', serif;
+            font-size: 7px;
+            fill: #4a7a9c;
+            font-style: italic;
+        }
+
+        .trail-line {
+            fill: none;
+            stroke-width: 3;
+            stroke-dasharray: 10, 5;
+            opacity: 0.8;
+            stroke-linecap: round;
+        }
+
+        .trail-label {
+            font-family: 'Lora', serif;
+            font-size: 9px;
+            font-style: italic;
+        }
+
+        .mountain {
+            fill: #8B7355;
+            opacity: 0.6;
+        }
+
+        .compass {
+            transform-origin: center;
         }
 
         .info-panel {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 300px;
-            background: var(--cream);
-            border: 3px solid var(--leather-brown);
-            padding: 20px;
-            box-shadow: 4px 4px 0 rgba(139, 69, 19, 0.3);
+            top: 50px;
+            right: 50px;
+            width: 320px;
+            background: linear-gradient(135deg, #f4e4bc 0%, #e8d5a3 100%);
+            border: 4px solid #8B4513;
+            padding: 25px;
+            box-shadow:
+                0 0 0 2px var(--gold),
+                6px 6px 15px rgba(0, 0, 0, 0.4);
             display: none;
             z-index: 100;
+            border-radius: 5px;
         }
 
         .info-panel.active {
             display: block;
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s ease;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(20px);
+                transform: translateX(30px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateX(0) scale(1);
             }
+        }
+
+        .info-panel::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            pointer-events: none;
+            border-radius: 3px;
         }
 
         .info-panel h3 {
             font-family: 'Rye', cursive;
-            color: var(--leather-brown);
-            font-size: 1.3rem;
+            color: #3d2e1a;
+            font-size: 1.2rem;
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--desert-sand);
+            border-bottom: 2px solid var(--gold);
         }
 
         .info-panel .location-type {
             display: inline-block;
-            padding: 3px 10px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            color: var(--cream);
-            background: var(--rust-red);
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            color: #f4e4bc;
+            font-family: 'Rye', cursive;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 3px;
         }
 
-        .info-panel .location-type.battle {
-            background: #8b3a3a;
-        }
-
-        .info-panel .location-type.gold {
-            background: var(--gold);
-            color: var(--dark-wood);
-        }
-
-        .info-panel .location-type.trail {
-            background: var(--sage-green);
-            color: var(--dark-wood);
-        }
-
-        .info-panel .location-type.town {
-            background: var(--leather-brown);
-        }
+        .info-panel .location-type.battle { background: #8b3a3a; }
+        .info-panel .location-type.gold { background: linear-gradient(135deg, #DAA520, #FFD700); color: #3d2e1a; }
+        .info-panel .location-type.trail { background: #6B8E23; }
+        .info-panel .location-type.town { background: #8B4513; }
+        .info-panel .location-type.event { background: #CD5C5C; }
 
         .info-panel p {
             font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--dark-wood);
+            line-height: 1.7;
+            color: #3d2e1a;
         }
 
         .info-panel .close-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+            top: 15px;
+            right: 15px;
+            background: #8B4513;
+            border: 2px solid var(--gold);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1.2rem;
             cursor: pointer;
-            color: var(--leather-brown);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .info-panel .close-btn:hover {
-            color: var(--rust-red);
+            background: var(--gold);
+            color: #8B4513;
+            transform: rotate(90deg);
         }
 
         .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 25px;
             justify-content: center;
             margin-top: 30px;
-            padding: 20px;
-            background: var(--cream);
-            border: 3px solid var(--leather-brown);
+            padding: 25px 30px;
+            background: linear-gradient(135deg, #f4e4bc 0%, #e8d5a3 100%);
+            border: 4px solid #8B4513;
+            box-shadow:
+                0 0 0 2px var(--gold),
+                4px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .legend::before {
+            content: 'MAP LEGEND';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8B4513;
+            color: var(--gold);
+            padding: 4px 20px;
+            font-family: 'Rye', cursive;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border: 2px solid var(--gold);
+            border-radius: 3px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 0.9rem;
+            color: #3d2e1a;
+            font-family: 'Lora', serif;
         }
 
         .legend-dot {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            border: 2px solid var(--cream);
-            box-shadow: 0 0 0 1px var(--leather-brown);
+            border: 2px solid #f4e4bc;
+            box-shadow:
+                0 0 0 1px #8B4513,
+                2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .legend-dot.battle { background: #8b3a3a; }
-        .legend-dot.gold { background: var(--gold); }
-        .legend-dot.trail { background: var(--sage-green); }
-        .legend-dot.town { background: var(--leather-brown); }
-        .legend-dot.event { background: var(--rust-red); }
+        .legend-dot.gold { background: linear-gradient(135deg, #DAA520, #FFD700); }
+        .legend-dot.trail { background: #6B8E23; }
+        .legend-dot.town { background: #8B4513; }
+        .legend-dot.event { background: #CD5C5C; }
+
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-line.oregon { background: #6B8E23; }
+        .legend-line.santafe { background: #9CAF88; }
+        .legend-line.chisholm { background: #CD853F; }
 
         .map-instructions {
             text-align: center;
-            margin-bottom: 30px;
-            color: var(--rust-red);
+            margin-bottom: 25px;
+            color: var(--gold);
             font-style: italic;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 900px) {
@@ -248,10 +436,26 @@
                 width: 100%;
                 max-height: 50vh;
                 overflow-y: auto;
+                border-radius: 15px 15px 0 0;
             }
 
             .map-hero h1 {
                 font-size: 2.5rem;
+            }
+
+            .map-wrapper {
+                padding: 15px;
+                border-width: 8px;
+            }
+
+            .legend {
+                gap: 15px;
+                padding: 30px 15px 20px;
+            }
+
+            .legend::before {
+                font-size: 0.75rem;
+                padding: 3px 15px;
             }
         }
     </style>
@@ -282,165 +486,249 @@
 
     <main class="map-section">
         <div class="map-container">
-            <p class="map-instructions">Click on the markers to learn about key locations in Western history</p>
+            <p class="map-instructions">Click on the markers to discover key locations in Western history</p>
 
             <div class="map-wrapper">
-                <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                <div class="map-title-banner">
+                    <h2>THE WESTERN TERRITORIES</h2>
+                    <p class="map-subtitle">Circa 1850-1890</p>
+                </div>
+
+                <svg class="map-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- State gradient -->
+                        <linearGradient id="stateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#E8D5A3"/>
+                            <stop offset="50%" style="stop-color:#D4C191"/>
+                            <stop offset="100%" style="stop-color:#C9B682"/>
+                        </linearGradient>
+                        <linearGradient id="stateHoverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#F5E6C8"/>
+                            <stop offset="50%" style="stop-color:#E8D5A3"/>
+                            <stop offset="100%" style="stop-color:#DAC896"/>
+                        </linearGradient>
+                        <!-- Mountain pattern -->
+                        <pattern id="mountainPattern" x="0" y="0" width="20" height="15" patternUnits="userSpaceOnUse">
+                            <polygon points="10,0 20,15 0,15" fill="#8B7355" opacity="0.4"/>
+                        </pattern>
+                    </defs>
+
+                    <!-- Decorative Border -->
+                    <rect x="5" y="5" width="790" height="510" fill="none" stroke="#8B4513" stroke-width="2" rx="3"/>
+                    <rect x="10" y="10" width="780" height="500" fill="none" stroke="#DAA520" stroke-width="1" stroke-dasharray="5,5" rx="2"/>
+
                     <!-- Western States -->
                     <!-- Washington -->
-                    <path class="state" d="M120,30 L180,30 L185,35 L190,80 L140,85 L100,80 L95,50 Z" data-state="Washington"/>
+                    <path class="state" d="M120,50 L180,50 L185,55 L190,100 L140,105 L100,100 L95,70 Z" data-state="Washington"/>
+                    <text class="state-label" x="140" y="80">WA</text>
 
                     <!-- Oregon -->
-                    <path class="state" d="M100,80 L140,85 L190,80 L195,130 L185,160 L130,165 L90,140 L85,100 Z" data-state="Oregon"/>
+                    <path class="state" d="M100,100 L140,105 L190,100 L195,150 L185,180 L130,185 L90,160 L85,120 Z" data-state="Oregon"/>
+                    <text class="state-label" x="140" y="145">OR</text>
 
                     <!-- California -->
-                    <path class="state" d="M90,140 L130,165 L140,220 L130,280 L100,340 L70,350 L50,300 L55,220 L70,160 Z" data-state="California"/>
+                    <path class="state" d="M90,160 L130,185 L140,240 L130,300 L100,360 L70,370 L50,320 L55,240 L70,180 Z" data-state="California"/>
+                    <text class="state-label" x="95" y="270">CA</text>
 
                     <!-- Nevada -->
-                    <path class="state" d="M130,165 L185,160 L200,170 L190,280 L140,290 L130,280 L140,220 Z" data-state="Nevada"/>
+                    <path class="state" d="M130,185 L185,180 L200,190 L190,300 L140,310 L130,300 L140,240 Z" data-state="Nevada"/>
+                    <text class="state-label" x="160" y="250">NV</text>
 
                     <!-- Idaho -->
-                    <path class="state" d="M190,80 L240,75 L250,85 L255,140 L230,160 L200,170 L185,160 L195,130 Z" data-state="Idaho"/>
+                    <path class="state" d="M190,100 L240,95 L250,105 L255,160 L230,180 L200,190 L185,180 L195,150 Z" data-state="Idaho"/>
+                    <text class="state-label" x="215" y="145">ID</text>
 
                     <!-- Montana -->
-                    <path class="state" d="M240,75 L190,80 L185,35 L200,25 L350,20 L360,80 L260,85 Z" data-state="Montana"/>
+                    <path class="state" d="M240,95 L190,100 L185,55 L200,45 L350,40 L360,100 L260,105 Z" data-state="Montana"/>
+                    <text class="state-label" x="270" y="75">MT</text>
 
                     <!-- Wyoming -->
-                    <path class="state" d="M260,85 L360,80 L370,160 L260,165 L255,140 L250,85 Z" data-state="Wyoming"/>
+                    <path class="state" d="M260,105 L360,100 L370,180 L260,185 L255,160 L250,105 Z" data-state="Wyoming"/>
+                    <text class="state-label" x="310" y="145">WY</text>
 
                     <!-- Utah -->
-                    <path class="state" d="M200,170 L230,160 L260,165 L265,180 L260,260 L190,265 L190,280 Z" data-state="Utah"/>
+                    <path class="state" d="M200,190 L230,180 L260,185 L265,200 L260,280 L190,285 L190,300 Z" data-state="Utah"/>
+                    <text class="state-label" x="225" y="240">UT</text>
 
                     <!-- Colorado -->
-                    <path class="state" d="M265,180 L370,175 L380,260 L270,265 L260,260 Z" data-state="Colorado"/>
+                    <path class="state" d="M265,200 L370,195 L380,280 L270,285 L260,280 Z" data-state="Colorado"/>
+                    <text class="state-label" x="320" y="245">CO</text>
 
                     <!-- Arizona -->
-                    <path class="state" d="M140,290 L190,280 L190,265 L260,260 L270,265 L275,350 L200,380 L130,370 L100,340 Z" data-state="Arizona"/>
+                    <path class="state" d="M140,310 L190,300 L190,285 L260,280 L270,285 L275,370 L200,400 L130,390 L100,360 Z" data-state="Arizona"/>
+                    <text class="state-label" x="195" y="345">AZ</text>
 
                     <!-- New Mexico -->
-                    <path class="state" d="M270,265 L380,260 L390,355 L395,390 L285,395 L275,350 Z" data-state="New Mexico"/>
+                    <path class="state" d="M270,285 L380,280 L390,375 L395,410 L285,415 L275,370 Z" data-state="New Mexico"/>
+                    <text class="state-label" x="330" y="350">NM</text>
 
                     <!-- North Dakota -->
-                    <path class="state" d="M360,80 L350,20 L460,15 L470,75 L370,80 Z" data-state="North Dakota"/>
+                    <path class="state" d="M360,100 L350,40 L460,35 L470,95 L370,100 Z" data-state="North Dakota"/>
+                    <text class="state-label" x="410" y="70">ND</text>
 
                     <!-- South Dakota -->
-                    <path class="state" d="M370,80 L470,75 L480,150 L375,155 L370,160 Z" data-state="South Dakota"/>
+                    <path class="state" d="M370,100 L470,95 L480,170 L375,175 L370,180 Z" data-state="South Dakota"/>
+                    <text class="state-label" x="420" y="140">SD</text>
 
                     <!-- Nebraska -->
-                    <path class="state" d="M375,155 L480,150 L500,165 L490,220 L380,225 L370,175 Z" data-state="Nebraska"/>
+                    <path class="state" d="M375,175 L480,170 L500,185 L490,240 L380,245 L370,195 Z" data-state="Nebraska"/>
+                    <text class="state-label" x="430" y="215">NE</text>
 
                     <!-- Kansas -->
-                    <path class="state" d="M380,225 L490,220 L500,290 L390,295 L380,260 Z" data-state="Kansas"/>
+                    <path class="state" d="M380,245 L490,240 L500,310 L390,315 L380,280 Z" data-state="Kansas"/>
+                    <text class="state-label" x="435" y="280">KS</text>
 
                     <!-- Oklahoma -->
-                    <path class="state" d="M390,295 L500,290 L510,300 L520,360 L400,365 L390,355 Z" data-state="Oklahoma"/>
+                    <path class="state" d="M390,315 L500,310 L510,320 L520,380 L400,385 L390,375 Z" data-state="Oklahoma"/>
+                    <text class="state-label" x="450" y="355">OK</text>
 
                     <!-- Texas -->
-                    <path class="state" d="M395,390 L390,355 L400,365 L520,360 L540,380 L560,450 L500,480 L400,470 L350,430 L320,400 L285,395 Z" data-state="Texas"/>
+                    <path class="state" d="M395,410 L390,375 L400,385 L520,380 L540,400 L560,470 L500,500 L400,490 L350,450 L320,420 L285,415 Z" data-state="Texas"/>
+                    <text class="state-label" x="430" y="450">TX</text>
 
-                    <!-- Major Rivers (decorative) -->
-                    <path d="M350,20 Q400,100 450,200 Q480,300 520,380" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
-                    <path d="M100,120 Q150,180 130,280" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
+                    <!-- Mountain Ranges (decorative) -->
+                    <g class="mountains" opacity="0.5">
+                        <!-- Rocky Mountains -->
+                        <path d="M280,60 L290,45 L300,60 L310,40 L320,60 L330,50 L340,65" fill="none" stroke="#6B5B4F" stroke-width="2"/>
+                        <path d="M290,140 L300,125 L310,140 L320,120 L330,140 L340,130 L350,145" fill="none" stroke="#6B5B4F" stroke-width="2"/>
+                        <path d="M300,200 L310,185 L320,200 L330,180 L340,200" fill="none" stroke="#6B5B4F" stroke-width="2"/>
+                        <!-- Sierra Nevada -->
+                        <path d="M100,200 L110,185 L120,200 L130,180 L140,200" fill="none" stroke="#6B5B4F" stroke-width="2"/>
+                        <path d="M95,240 L105,225 L115,240 L125,220 L135,240" fill="none" stroke="#6B5B4F" stroke-width="2"/>
+                    </g>
+
+                    <!-- Major Rivers -->
+                    <path class="river" d="M350,40 Q400,120 450,220 Q480,320 520,400"/>
+                    <text class="river-label" x="470" y="270" transform="rotate(60 470,270)">Missouri R.</text>
+                    <path class="river" d="M100,140 Q150,200 130,300"/>
+                    <text class="river-label" x="115" y="220" transform="rotate(70 115,220)">Sacramento</text>
+                    <path class="river" d="M270,285 Q320,350 395,410"/>
+                    <text class="river-label" x="330" y="380" transform="rotate(40 330,380)">Rio Grande</text>
+
+                    <!-- Trail Lines -->
+                    <!-- Oregon Trail -->
+                    <path class="trail-line" d="M480,260 Q400,220 310,150 Q250,120 150,130 Q100,150 70,220"
+                          stroke="#4A7023" filter="url(#shadow)"/>
+                    <text class="trail-label" x="240" y="110" fill="#4A7023" font-weight="bold">Oregon Trail</text>
+
+                    <!-- Santa Fe Trail -->
+                    <path class="trail-line" d="M480,260 Q420,290 310,330"
+                          stroke="#8B7355"/>
+                    <text class="trail-label" x="380" y="320" fill="#8B7355" font-weight="bold">Santa Fe Trail</text>
+
+                    <!-- Chisholm Trail -->
+                    <path class="trail-line" d="M420,440 Q430,370 420,280"
+                          stroke="#CD853F"/>
+                    <text class="trail-label" x="435" y="370" fill="#CD853F" font-weight="bold">Chisholm Trail</text>
+
+                    <!-- Compass Rose -->
+                    <g class="compass" transform="translate(720, 450)">
+                        <circle cx="0" cy="0" r="35" fill="#f4e4bc" stroke="#8B4513" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="30" fill="none" stroke="#DAA520" stroke-width="1"/>
+                        <polygon points="0,-25 4,-8 0,-12 -4,-8" fill="#8B4513"/>
+                        <polygon points="0,25 4,8 0,12 -4,8" fill="#CD853F"/>
+                        <polygon points="-25,0 -8,4 -12,0 -8,-4" fill="#CD853F"/>
+                        <polygon points="25,0 8,4 12,0 8,-4" fill="#CD853F"/>
+                        <text x="0" y="-38" text-anchor="middle" font-family="Rye" font-size="10" fill="#8B4513">N</text>
+                        <text x="0" y="48" text-anchor="middle" font-family="Rye" font-size="8" fill="#8B4513">S</text>
+                        <text x="-40" y="4" text-anchor="middle" font-family="Rye" font-size="8" fill="#8B4513">W</text>
+                        <text x="40" y="4" text-anchor="middle" font-family="Rye" font-size="8" fill="#8B4513">E</text>
+                        <circle cx="0" cy="0" r="4" fill="#DAA520"/>
+                    </g>
+
+                    <!-- Scale Bar -->
+                    <g transform="translate(50, 480)">
+                        <rect x="0" y="0" width="100" height="8" fill="#8B4513"/>
+                        <rect x="0" y="0" width="50" height="8" fill="#f4e4bc"/>
+                        <text x="0" y="20" font-family="Lora" font-size="8" fill="#3d2e1a">0</text>
+                        <text x="50" y="20" font-family="Lora" font-size="8" fill="#3d2e1a">250</text>
+                        <text x="100" y="20" font-family="Lora" font-size="8" fill="#3d2e1a">500 mi</text>
+                    </g>
 
                     <!-- Markers -->
                     <!-- Promontory Summit, Utah - Railroad -->
-                    <g class="marker event" data-location="promontory" onclick="showInfo('promontory')">
-                        <circle cx="215" cy="185" r="8"/>
-                        <text class="marker-label" x="225" y="188">Promontory</text>
+                    <g class="marker event" onclick="showInfo('promontory')">
+                        <circle cx="215" cy="205" r="8"/>
+                        <text class="marker-label" x="228" y="208">Promontory</text>
                     </g>
 
                     <!-- Sutter's Mill, California - Gold -->
-                    <g class="marker gold" data-location="sutters" onclick="showInfo('sutters')">
-                        <circle cx="95" cy="190" r="8"/>
-                        <text class="marker-label" x="105" y="193">Sutter's Mill</text>
+                    <g class="marker gold" onclick="showInfo('sutters')">
+                        <circle cx="95" cy="210" r="8"/>
+                        <text class="marker-label" x="108" y="213">Sutter's Mill</text>
                     </g>
 
                     <!-- Tombstone, Arizona -->
-                    <g class="marker town" data-location="tombstone" onclick="showInfo('tombstone')">
-                        <circle cx="200" cy="340" r="8"/>
-                        <text class="marker-label" x="210" y="343">Tombstone</text>
+                    <g class="marker town" onclick="showInfo('tombstone')">
+                        <circle cx="200" cy="360" r="8"/>
+                        <text class="marker-label" x="213" y="363">Tombstone</text>
                     </g>
 
                     <!-- Little Bighorn, Montana -->
-                    <g class="marker battle" data-location="littlebighorn" onclick="showInfo('littlebighorn')">
-                        <circle cx="300" cy="55" r="8"/>
-                        <text class="marker-label" x="310" y="58">Little Bighorn</text>
+                    <g class="marker battle" onclick="showInfo('littlebighorn')">
+                        <circle cx="300" cy="75" r="8"/>
+                        <text class="marker-label" x="313" y="78">Little Bighorn</text>
                     </g>
 
                     <!-- Wounded Knee, South Dakota -->
-                    <g class="marker battle" data-location="woundedknee" onclick="showInfo('woundedknee')">
-                        <circle cx="420" cy="120" r="8"/>
-                        <text class="marker-label" x="430" y="123">Wounded Knee</text>
+                    <g class="marker battle" onclick="showInfo('woundedknee')">
+                        <circle cx="420" cy="140" r="8"/>
+                        <text class="marker-label" x="433" y="143">Wounded Knee</text>
                     </g>
 
                     <!-- The Alamo, Texas -->
-                    <g class="marker battle" data-location="alamo" onclick="showInfo('alamo')">
-                        <circle cx="420" cy="420" r="8"/>
-                        <text class="marker-label" x="430" y="423">The Alamo</text>
+                    <g class="marker battle" onclick="showInfo('alamo')">
+                        <circle cx="420" cy="440" r="8"/>
+                        <text class="marker-label" x="433" y="443">The Alamo</text>
                     </g>
 
                     <!-- Dodge City, Kansas -->
-                    <g class="marker town" data-location="dodge" onclick="showInfo('dodge')">
-                        <circle cx="420" cy="260" r="8"/>
-                        <text class="marker-label" x="430" y="263">Dodge City</text>
+                    <g class="marker town" onclick="showInfo('dodge')">
+                        <circle cx="420" cy="280" r="8"/>
+                        <text class="marker-label" x="433" y="283">Dodge City</text>
                     </g>
 
                     <!-- Deadwood, South Dakota -->
-                    <g class="marker town" data-location="deadwood" onclick="showInfo('deadwood')">
-                        <circle cx="400" cy="100" r="8"/>
-                        <text class="marker-label" x="410" y="103">Deadwood</text>
+                    <g class="marker town" onclick="showInfo('deadwood')">
+                        <circle cx="400" cy="120" r="8"/>
+                        <text class="marker-label" x="413" y="123">Deadwood</text>
                     </g>
 
                     <!-- Denver, Colorado -->
-                    <g class="marker town" data-location="denver" onclick="showInfo('denver')">
-                        <circle cx="320" cy="210" r="8"/>
-                        <text class="marker-label" x="330" y="213">Denver</text>
+                    <g class="marker town" onclick="showInfo('denver')">
+                        <circle cx="320" cy="230" r="8"/>
+                        <text class="marker-label" x="333" y="233">Denver</text>
                     </g>
 
                     <!-- Santa Fe, New Mexico -->
-                    <g class="marker trail" data-location="santafe" onclick="showInfo('santafe')">
-                        <circle cx="310" cy="310" r="8"/>
-                        <text class="marker-label" x="320" y="313">Santa Fe</text>
+                    <g class="marker trail" onclick="showInfo('santafe')">
+                        <circle cx="310" cy="330" r="8"/>
+                        <text class="marker-label" x="323" y="333">Santa Fe</text>
                     </g>
 
-                    <!-- Oregon Trail Start - Independence, MO (edge of map) -->
-                    <g class="marker trail" data-location="independence" onclick="showInfo('independence')">
-                        <circle cx="480" cy="240" r="8"/>
-                        <text class="marker-label" x="450" y="255">Independence</text>
+                    <!-- Independence, MO -->
+                    <g class="marker trail" onclick="showInfo('independence')">
+                        <circle cx="480" cy="260" r="8"/>
+                        <text class="marker-label" x="450" y="275">Independence</text>
                     </g>
 
                     <!-- Virginia City, Nevada -->
-                    <g class="marker gold" data-location="virginiacitynv" onclick="showInfo('virginiacitynv')">
-                        <circle cx="155" cy="190" r="8"/>
-                        <text class="marker-label" x="130" y="205">Virginia City</text>
+                    <g class="marker gold" onclick="showInfo('virginiacitynv')">
+                        <circle cx="155" cy="210" r="8"/>
+                        <text class="marker-label" x="125" y="225">Virginia City</text>
                     </g>
 
                     <!-- Fort Laramie, Wyoming -->
-                    <g class="marker trail" data-location="laramie" onclick="showInfo('laramie')">
-                        <circle cx="310" cy="130" r="8"/>
-                        <text class="marker-label" x="320" y="133">Ft. Laramie</text>
+                    <g class="marker trail" onclick="showInfo('laramie')">
+                        <circle cx="310" cy="150" r="8"/>
+                        <text class="marker-label" x="323" y="153">Ft. Laramie</text>
                     </g>
 
                     <!-- San Francisco -->
-                    <g class="marker town" data-location="sanfrancisco" onclick="showInfo('sanfrancisco')">
-                        <circle cx="70" cy="200" r="8"/>
-                        <text class="marker-label" x="45" y="215">San Francisco</text>
+                    <g class="marker town" onclick="showInfo('sanfrancisco')">
+                        <circle cx="70" cy="220" r="8"/>
+                        <text class="marker-label" x="40" y="235">San Francisco</text>
                     </g>
-
-                    <!-- Trail Lines (Oregon Trail) -->
-                    <path d="M480,240 Q400,200 310,130 Q250,100 150,110 Q100,130 70,200"
-                          fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
-                    <text x="280" y="95" font-size="10" fill="#9CAF88" font-style="italic">Oregon Trail</text>
-
-                    <!-- Santa Fe Trail -->
-                    <path d="M480,240 Q420,270 310,310"
-                          fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
-                    <text x="380" y="300" font-size="10" fill="#9CAF88" font-style="italic">Santa Fe Trail</text>
-
-                    <!-- Chisholm Trail -->
-                    <path d="M420,420 Q430,350 420,260"
-                          fill="none" stroke="#CD853F" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
-                    <text x="435" y="350" font-size="10" fill="#CD853F" font-style="italic">Chisholm Trail</text>
                 </svg>
 
                 <!-- Info Panel -->
@@ -632,15 +920,12 @@
             const titleEl = document.getElementById('location-title');
             const descEl = document.getElementById('location-desc');
 
-            // Update content
             titleEl.textContent = location.title;
             descEl.textContent = location.desc;
 
-            // Update type badge
             typeEl.textContent = location.type.charAt(0).toUpperCase() + location.type.slice(1);
             typeEl.className = 'location-type ' + location.type;
 
-            // Show panel
             panel.classList.add('active');
         }
 
@@ -648,14 +933,12 @@
             document.getElementById('info-panel').classList.remove('active');
         }
 
-        // Close panel when clicking outside
         document.querySelector('.map-svg').addEventListener('click', function(e) {
             if (!e.target.closest('.marker')) {
                 closeInfo();
             }
         });
 
-        // Music toggle
         function toggleMusic() {
             const music = document.getElementById('bg-music');
             const btn = document.getElementById('music-btn');
