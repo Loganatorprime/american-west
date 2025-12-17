@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild West Trivia - The American West</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .quiz-hero {
+            min-height: 40vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .quiz-hero h1 {
+            font-size: 3.5rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .quiz-hero p {
+            color: var(--parchment);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .quiz-start {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+        }
+
+        .quiz-start h2 {
+            font-size: 2rem;
+            color: var(--leather-brown);
+            margin-bottom: 20px;
+        }
+
+        .quiz-start p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: var(--dark-wood);
+        }
+
+        .quiz-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--gold);
+            color: var(--dark-wood);
+            text-decoration: none;
+            font-family: 'Rye', cursive;
+            font-size: 1.2rem;
+            border: 3px solid var(--dark-wood);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 var(--dark-wood);
+        }
+
+        .quiz-btn:hover {
+            background: var(--cream);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--dark-wood);
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: var(--dark-wood);
+            color: var(--cream);
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            height: 12px;
+            background: var(--charcoal);
+            margin: 0 20px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--gold), var(--sunset-orange));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            padding: 40px;
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-number {
+            font-family: 'Rye', cursive;
+            font-size: 1rem;
+            color: var(--rust-red);
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            color: var(--dark-wood);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-btn {
+            padding: 18px 25px;
+            background: var(--parchment);
+            border: 3px solid var(--leather-brown);
+            color: var(--dark-wood);
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-btn:hover:not(.disabled) {
+            background: var(--desert-sand);
+            transform: translateX(10px);
+        }
+
+        .answer-btn.correct {
+            background: #4a7c4e;
+            color: white;
+            border-color: #3d6640;
+        }
+
+        .answer-btn.incorrect {
+            background: #8b3a3a;
+            color: white;
+            border-color: #6b2a2a;
+        }
+
+        .answer-btn.disabled {
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: rgba(74, 124, 78, 0.2);
+            border: 2px solid #4a7c4e;
+            color: #3d6640;
+        }
+
+        .feedback.incorrect {
+            background: rgba(139, 58, 58, 0.2);
+            border: 2px solid #8b3a3a;
+            color: #6b2a2a;
+        }
+
+        .next-btn {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+
+        .quiz-results.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        .results-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            color: var(--leather-brown);
+            margin-bottom: 15px;
+        }
+
+        .results-score {
+            font-size: 4rem;
+            font-family: 'Rye', cursive;
+            color: var(--gold);
+            margin: 20px 0;
+        }
+
+        .results-message {
+            font-size: 1.2rem;
+            color: var(--dark-wood);
+            margin-bottom: 30px;
+        }
+
+        .results-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--parchment);
+        }
+
+        .breakdown-item {
+            text-align: center;
+        }
+
+        .breakdown-number {
+            font-family: 'Rye', cursive;
+            font-size: 2rem;
+            display: block;
+        }
+
+        .breakdown-number.correct-num {
+            color: #4a7c4e;
+        }
+
+        .breakdown-number.incorrect-num {
+            color: #8b3a3a;
+        }
+
+        .breakdown-label {
+            font-size: 0.9rem;
+            color: var(--rust-red);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .home-link {
+            background: var(--leather-brown);
+            color: var(--cream);
+        }
+
+        .home-link:hover {
+            background: var(--rust-red);
+            color: var(--cream);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .quiz-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .quiz-progress {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-bar-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .results-breakdown {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#timeline">Timeline</a></li>
+                <li><a href="index.html#legends">Legends</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="quiz-hero">
+        <div class="container">
+            <h1>Wild West Trivia</h1>
+            <p>Test your knowledge of America's frontier era</p>
+        </div>
+    </section>
+
+    <main class="quiz-section" style="background: var(--parchment); padding-bottom: 80px;">
+        <div class="quiz-container">
+            <!-- Start Screen -->
+            <div class="quiz-start" id="quiz-start">
+                <h2>Are You Ready, Partner?</h2>
+                <p>30 questions about the legends, events, and history of the American West. Think you've got what it takes to be a true frontier expert?</p>
+                <button class="quiz-btn" onclick="startQuiz()">Start the Quiz</button>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quiz-content" style="display: none;">
+                <div class="quiz-progress">
+                    <span id="question-counter">Question 1/30</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <span id="score-display">Score: 0</span>
+                </div>
+
+                <div id="questions-container"></div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="quiz-results" id="quiz-results">
+                <div class="results-icon" id="results-icon">&#127941;</div>
+                <h2 class="results-title" id="results-title">Quiz Complete!</h2>
+                <div class="results-score" id="final-score">0/30</div>
+                <p class="results-message" id="results-message"></p>
+                <div class="results-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-number correct-num" id="correct-count">0</span>
+                        <span class="breakdown-label">Correct</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-number incorrect-num" id="incorrect-count">0</span>
+                        <span class="breakdown-label">Incorrect</span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="quiz-btn" onclick="restartQuiz()">Try Again</button>
+                    <a href="index.html" class="quiz-btn home-link">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+            <div class="footer-bottom">
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "In what year did the United States purchase the Louisiana Territory from France?",
+                answers: ["1803", "1812", "1776", "1850"],
+                correct: 0
+            },
+            {
+                question: "How much did the United States pay for the Louisiana Purchase?",
+                answers: ["$5 million", "$15 million", "$50 million", "$100 million"],
+                correct: 1
+            },
+            {
+                question: "Who led the famous expedition to explore the Louisiana Territory?",
+                answers: ["Daniel Boone and Davy Crockett", "Lewis and Clark", "Kit Carson and Jim Bridger", "Buffalo Bill and Wild Bill"],
+                correct: 1
+            },
+            {
+                question: "What Native American woman helped guide Lewis and Clark on their expedition?",
+                answers: ["Pocahontas", "Sacagawea", "Lozen", "Winona"],
+                correct: 1
+            },
+            {
+                question: "In what year did the Battle of the Alamo take place?",
+                answers: ["1821", "1836", "1845", "1850"],
+                correct: 1
+            },
+            {
+                question: "How many days did the defenders hold the Alamo against Mexican forces?",
+                answers: ["3 days", "7 days", "13 days", "21 days"],
+                correct: 2
+            },
+            {
+                question: "Where was gold first discovered that sparked the California Gold Rush?",
+                answers: ["San Francisco", "Sacramento", "Sutter's Mill", "Los Angeles"],
+                correct: 2
+            },
+            {
+                question: "What were the prospectors of 1849 commonly called?",
+                answers: ["Gold Diggers", "Forty-Niners", "Lucky Strikers", "Panhandlers"],
+                correct: 1
+            },
+            {
+                question: "The Homestead Act of 1862 offered how many acres of free land to settlers?",
+                answers: ["40 acres", "100 acres", "160 acres", "320 acres"],
+                correct: 2
+            },
+            {
+                question: "Which president signed the Homestead Act into law?",
+                answers: ["Andrew Jackson", "Abraham Lincoln", "Ulysses S. Grant", "James Polk"],
+                correct: 1
+            },
+            {
+                question: "In what year was the Transcontinental Railroad completed?",
+                answers: ["1859", "1865", "1869", "1875"],
+                correct: 2
+            },
+            {
+                question: "Where did the Central Pacific and Union Pacific railroads meet?",
+                answers: ["Omaha, Nebraska", "Promontory Summit, Utah", "Cheyenne, Wyoming", "Denver, Colorado"],
+                correct: 1
+            },
+            {
+                question: "What was the name of the famous ceremony marking the railroad's completion?",
+                answers: ["The Iron Horse Celebration", "The Golden Spike Ceremony", "The Rails United Festival", "The Continental Connection"],
+                correct: 1
+            },
+            {
+                question: "Who was the Lakota leader at the Battle of Little Bighorn?",
+                answers: ["Geronimo", "Cochise", "Sitting Bull", "Red Cloud"],
+                correct: 2
+            },
+            {
+                question: "Which U.S. military commander was defeated at the Battle of Little Bighorn?",
+                answers: ["General Sherman", "Colonel Custer", "General Crook", "Colonel Miles"],
+                correct: 1
+            },
+            {
+                question: "In what year did the Battle of Little Bighorn occur?",
+                answers: ["1868", "1872", "1876", "1880"],
+                correct: 2
+            },
+            {
+                question: "The Gunfight at the O.K. Corral took place in which Arizona town?",
+                answers: ["Tucson", "Phoenix", "Tombstone", "Flagstaff"],
+                correct: 2
+            },
+            {
+                question: "How long did the Gunfight at the O.K. Corral last?",
+                answers: ["30 seconds", "5 minutes", "15 minutes", "1 hour"],
+                correct: 0
+            },
+            {
+                question: "Which lawman was famous for his role in the O.K. Corral gunfight?",
+                answers: ["Wild Bill Hickok", "Wyatt Earp", "Pat Garrett", "Bat Masterson"],
+                correct: 1
+            },
+            {
+                question: "Who was Doc Holliday's profession before becoming a gambler and gunfighter?",
+                answers: ["Lawyer", "Dentist", "Doctor", "Blacksmith"],
+                correct: 1
+            },
+            {
+                question: "Buffalo Bill's Wild West Show first premiered in what year?",
+                answers: ["1873", "1878", "1883", "1890"],
+                correct: 2
+            },
+            {
+                question: "Who was the famous sharpshooter in Buffalo Bill's Wild West Show?",
+                answers: ["Calamity Jane", "Annie Oakley", "Belle Starr", "Pearl Hart"],
+                correct: 1
+            },
+            {
+                question: "The Wounded Knee Massacre occurred in which state?",
+                answers: ["Montana", "Wyoming", "South Dakota", "Nebraska"],
+                correct: 2
+            },
+            {
+                question: "In what year did the Wounded Knee Massacre take place?",
+                answers: ["1876", "1885", "1890", "1895"],
+                correct: 2
+            },
+            {
+                question: "Who declared the American frontier officially closed in 1893?",
+                answers: ["President Cleveland", "Frederick Jackson Turner", "Buffalo Bill Cody", "Theodore Roosevelt"],
+                correct: 1
+            },
+            {
+                question: "What was Billy the Kid's real name?",
+                answers: ["William Bonney", "Henry McCarty", "John Wesley Hardin", "Jesse Woodson"],
+                correct: 1
+            },
+            {
+                question: "Who shot and killed Billy the Kid?",
+                answers: ["Wyatt Earp", "Doc Holliday", "Pat Garrett", "Wild Bill Hickok"],
+                correct: 2
+            },
+            {
+                question: "What famous trail did cattle drivers use to move longhorns from Texas to Kansas?",
+                answers: ["Oregon Trail", "Santa Fe Trail", "Chisholm Trail", "California Trail"],
+                correct: 2
+            },
+            {
+                question: "What Native American leader led Apache resistance against U.S. expansion?",
+                answers: ["Crazy Horse", "Geronimo", "Chief Joseph", "Tecumseh"],
+                correct: 1
+            },
+            {
+                question: "The term 'Wild West' typically refers to which time period?",
+                answers: ["1750-1800", "1800-1850", "1865-1895", "1900-1950"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function startQuiz() {
+            document.getElementById('quiz-start').style.display = 'none';
+            document.getElementById('quiz-content').style.display = 'block';
+            renderQuestions();
+            showQuestion(0);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            questions.forEach((q, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.id = `question-${index}`;
+
+                let answersHTML = '';
+                q.answers.forEach((answer, ansIndex) => {
+                    answersHTML += `<button class="answer-btn" onclick="checkAnswer(${index}, ${ansIndex})">${answer}</button>`;
+                });
+
+                questionCard.innerHTML = `
+                    <div class="question-number">Question ${index + 1} of 30</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="answers">${answersHTML}</div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                    <button class="quiz-btn next-btn" id="next-${index}" onclick="nextQuestion()">
+                        ${index === questions.length - 1 ? 'See Results' : 'Next Question'}
+                    </button>
+                `;
+                container.appendChild(questionCard);
+            });
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`question-${index}`).classList.add('active');
+
+            document.getElementById('question-counter').textContent = `Question ${index + 1}/30`;
+            document.getElementById('progress-bar').style.width = `${((index) / 30) * 100}%`;
+
+            answered = false;
+        }
+
+        function checkAnswer(questionIndex, answerIndex) {
+            if (answered) return;
+            answered = true;
+
+            const question = questions[questionIndex];
+            const buttons = document.querySelectorAll(`#question-${questionIndex} .answer-btn`);
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            const nextBtn = document.getElementById(`next-${questionIndex}`);
+
+            buttons.forEach((btn, index) => {
+                btn.classList.add('disabled');
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                } else if (index === answerIndex && answerIndex !== question.correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (answerIndex === question.correct) {
+                score++;
+                feedback.className = 'feedback correct show';
+                feedback.textContent = "Correct! Well done, partner!";
+            } else {
+                feedback.className = 'feedback incorrect show';
+                feedback.textContent = `Incorrect. The answer was: ${question.answers[question.correct]}`;
+            }
+
+            document.getElementById('score-display').textContent = `Score: ${score}`;
+            nextBtn.classList.add('show');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('quiz-results').classList.add('active');
+
+            const percentage = (score / 30) * 100;
+            document.getElementById('final-score').textContent = `${score}/30`;
+            document.getElementById('correct-count').textContent = score;
+            document.getElementById('incorrect-count').textContent = 30 - score;
+
+            let icon, title, message;
+            if (percentage >= 90) {
+                icon = '&#127942;';
+                title = 'True Frontier Legend!';
+                message = "Outstanding! You know the Wild West like the back of your hand!";
+            } else if (percentage >= 70) {
+                icon = '&#11088;';
+                title = 'Seasoned Cowboy!';
+                message = "Great job! You've got solid knowledge of the frontier.";
+            } else if (percentage >= 50) {
+                icon = '&#129312;';
+                title = 'Frontier Apprentice';
+                message = "Not bad! You're learning the ways of the West.";
+            } else if (percentage >= 30) {
+                icon = '&#127797;';
+                title = 'Tenderfoot';
+                message = "You're still green, but every cowboy starts somewhere!";
+            } else {
+                icon = '&#128562;';
+                title = 'City Slicker';
+                message = "Looks like you need to spend more time on the frontier!";
+            }
+
+            document.getElementById('results-icon').innerHTML = icon;
+            document.getElementById('results-title').textContent = title;
+            document.getElementById('results-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+
+            document.getElementById('quiz-results').classList.remove('active');
+            document.getElementById('questions-container').innerHTML = '';
+            document.getElementById('quiz-content').style.display = 'block';
+            document.getElementById('score-display').textContent = 'Score: 0';
+            document.getElementById('progress-bar').style.width = '0%';
+
+            renderQuestions();
+            showQuestion(0);
+        }
+    </script>
+</body>
+</html>
