@@ -360,7 +360,7 @@
             <div class="quiz-start" id="quiz-start">
                 <h2>Are You Ready, Partner?</h2>
                 <p>30 questions about the legends, events, and history of the American West. Think you've got what it takes to be a true frontier expert?</p>
-                <button class="quiz-btn" onclick="startQuiz()">Start the Quiz</button>
+                <button type="button" class="quiz-btn" onclick="startQuiz()">Start the Quiz</button>
             </div>
 
             <!-- Quiz Questions -->
@@ -393,7 +393,7 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button class="quiz-btn" onclick="restartQuiz()">Try Again</button>
+                    <button type="button" class="quiz-btn" onclick="restartQuiz()">Try Again</button>
                     <a href="index.html" class="quiz-btn home-link">Back to Home</a>
                 </div>
             </div>
@@ -597,7 +597,7 @@
                     <div class="question-text">${q.question}</div>
                     <div class="answers">${answersHTML}</div>
                     <div class="feedback" id="feedback-${index}"></div>
-                    <button class="quiz-btn next-btn" id="next-${index}" onclick="nextQuestion()">
+                    <button type="button" class="quiz-btn next-btn" id="next-${index}" onclick="nextQuestion()">
                         ${index === questions.length - 1 ? 'See Results' : 'Next Question'}
                     </button>
                 `;
