@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lasso Catch - The American West</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .game-hero {
+            min-height: 30vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .game-hero h1 {
+            font-size: 3rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-hero p {
+            color: var(--parchment);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .game-section {
+            padding: 40px 0 80px;
+            background: var(--parchment);
+        }
+
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: var(--dark-wood);
+            color: var(--cream);
+            margin-bottom: 20px;
+            border: 3px solid var(--gold);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--desert-sand);
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-family: 'Rye', cursive;
+            font-size: 1.8rem;
+            color: var(--gold);
+        }
+
+        .game-canvas-wrapper {
+            position: relative;
+            border: 4px solid var(--leather-brown);
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, #C2B280 60%, #8B7355 100%);
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            cursor: crosshair;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 36, 22, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .game-overlay.hidden {
+            display: none;
+        }
+
+        .overlay-title {
+            font-family: 'Rye', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .overlay-score {
+            font-size: 1.5rem;
+            color: var(--cream);
+            margin-bottom: 10px;
+        }
+
+        .overlay-message {
+            font-size: 1.1rem;
+            color: var(--desert-sand);
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .game-btn {
+            padding: 15px 40px;
+            background: var(--gold);
+            color: var(--dark-wood);
+            font-family: 'Rye', cursive;
+            font-size: 1.2rem;
+            border: 3px solid var(--dark-wood);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 var(--dark-wood);
+        }
+
+        .game-btn:hover {
+            background: var(--cream);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--dark-wood);
+        }
+
+        .instructions {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
+        }
+
+        .instructions h3 {
+            font-family: 'Rye', cursive;
+            color: var(--leather-brown);
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--dark-wood);
+        }
+
+        .instructions li::before {
+            content: "★";
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        .high-score {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--dark-wood);
+            border: 3px solid var(--gold);
+        }
+
+        .high-score span {
+            font-family: 'Rye', cursive;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .game-hero h1 {
+                font-size: 2rem;
+            }
+
+            .game-stats {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="map.html">Map</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="lasso.html">Lasso Game</a></li>
+                <li><a href="gold.html">Gold Panning</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="game-hero">
+        <div class="container">
+            <h1>Lasso Catch</h1>
+            <p>Round up the cattle before time runs out!</p>
+        </div>
+    </section>
+
+    <main class="game-section">
+        <div class="game-container">
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Time</div>
+                    <div class="stat-value" id="timer">60</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Caught</div>
+                    <div class="stat-value" id="caught">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Escaped</div>
+                    <div class="stat-value" id="escaped">0</div>
+                </div>
+            </div>
+
+            <div class="game-canvas-wrapper">
+                <canvas id="gameCanvas" width="860" height="500"></canvas>
+
+                <!-- Start Overlay -->
+                <div class="game-overlay" id="startOverlay">
+                    <div class="overlay-title">Lasso Catch</div>
+                    <div class="overlay-message">
+                        Click and drag to throw your lasso around the cattle. Catch as many as you can before time runs out!
+                    </div>
+                    <button class="game-btn" onclick="startGame()">Start Roundup!</button>
+                </div>
+
+                <!-- Game Over Overlay -->
+                <div class="game-overlay hidden" id="gameOverOverlay">
+                    <div class="overlay-title">Roundup Over!</div>
+                    <div class="overlay-score" id="finalScore">You caught 0 cattle!</div>
+                    <div class="overlay-message" id="finalMessage">Not bad, cowboy!</div>
+                    <button class="game-btn" onclick="startGame()">Try Again</button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>How to Play</h3>
+                <ul>
+                    <li>Click and hold to start your lasso</li>
+                    <li>Drag around a cow to encircle it</li>
+                    <li>Release to catch the cow</li>
+                    <li>Bigger cattle are worth more points</li>
+                    <li>Don't let too many escape off screen!</li>
+                </ul>
+            </div>
+
+            <div class="high-score">
+                <span>High Score: <span id="highScore">0</span></span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+            <div class="footer-bottom">
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let gameRunning = false;
+        let score = 0;
+        let timeLeft = 60;
+        let caught = 0;
+        let escaped = 0;
+        let cattle = [];
+        let lassoPoints = [];
+        let isDrawing = false;
+        let timerInterval;
+        let highScore = localStorage.getItem('lassoHighScore') || 0;
+
+        document.getElementById('highScore').textContent = highScore;
+
+        // Cattle class
+        class Cow {
+            constructor() {
+                this.size = 30 + Math.random() * 30;
+                this.x = -this.size;
+                this.y = 300 + Math.random() * 150;
+                this.speed = 1 + Math.random() * 2;
+                this.points = Math.floor(this.size / 10) * 10;
+                this.color = Math.random() > 0.3 ? '#8B4513' : '#2C2416';
+                this.caught = false;
+            }
+
+            draw() {
+                if (this.caught) return;
+
+                ctx.save();
+
+                // Body
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Head
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.size * 0.8, this.y - this.size * 0.2, this.size * 0.4, this.size * 0.35, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Horns
+                ctx.strokeStyle = '#F5F5DC';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(this.x + this.size * 0.9, this.y - this.size * 0.4);
+                ctx.lineTo(this.x + this.size * 0.7, this.y - this.size * 0.7);
+                ctx.moveTo(this.x + this.size * 1.1, this.y - this.size * 0.4);
+                ctx.lineTo(this.x + this.size * 1.3, this.y - this.size * 0.7);
+                ctx.stroke();
+
+                // Legs
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x - this.size * 0.5, this.y + this.size * 0.4, 8, 25);
+                ctx.fillRect(this.x - this.size * 0.2, this.y + this.size * 0.4, 8, 25);
+                ctx.fillRect(this.x + this.size * 0.2, this.y + this.size * 0.4, 8, 25);
+                ctx.fillRect(this.x + this.size * 0.5, this.y + this.size * 0.4, 8, 25);
+
+                // Eye
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + this.size * 0.95, this.y - this.size * 0.25, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            update() {
+                if (!this.caught) {
+                    this.x += this.speed;
+                }
+            }
+
+            isOffScreen() {
+                return this.x > canvas.width + this.size;
+            }
+        }
+
+        // Mouse/Touch handlers
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            if (e.touches) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', startLasso);
+        canvas.addEventListener('mousemove', drawLasso);
+        canvas.addEventListener('mouseup', releaseLasso);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startLasso(e); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); drawLasso(e); });
+        canvas.addEventListener('touchend', (e) => { e.preventDefault(); releaseLasso(e); });
+
+        function startLasso(e) {
+            if (!gameRunning) return;
+            isDrawing = true;
+            lassoPoints = [getPos(e)];
+        }
+
+        function drawLasso(e) {
+            if (!isDrawing || !gameRunning) return;
+            lassoPoints.push(getPos(e));
+        }
+
+        function releaseLasso(e) {
+            if (!isDrawing || !gameRunning) return;
+            isDrawing = false;
+
+            // Check if any cattle are caught
+            if (lassoPoints.length > 10) {
+                cattle.forEach(cow => {
+                    if (!cow.caught && isPointInLasso(cow.x, cow.y)) {
+                        cow.caught = true;
+                        score += cow.points;
+                        caught++;
+                        updateStats();
+                        showCatchEffect(cow.x, cow.y, cow.points);
+                    }
+                });
+            }
+
+            lassoPoints = [];
+        }
+
+        function isPointInLasso(px, py) {
+            if (lassoPoints.length < 3) return false;
+
+            let inside = false;
+            const points = lassoPoints;
+
+            for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+                const xi = points[i].x, yi = points[i].y;
+                const xj = points[j].x, yj = points[j].y;
+
+                if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) {
+                    inside = !inside;
+                }
+            }
+
+            return inside;
+        }
+
+        let catchEffects = [];
+
+        function showCatchEffect(x, y, points) {
+            catchEffects.push({
+                x: x,
+                y: y,
+                points: points,
+                alpha: 1,
+                offsetY: 0
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('caught').textContent = caught;
+            document.getElementById('escaped').textContent = escaped;
+        }
+
+        function spawnCattle() {
+            if (Math.random() < 0.02 && cattle.filter(c => !c.caught && !c.isOffScreen()).length < 8) {
+                cattle.push(new Cow());
+            }
+        }
+
+        function drawBackground() {
+            // Sky
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            skyGradient.addColorStop(0, '#87CEEB');
+            skyGradient.addColorStop(1, '#E0F0FF');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, 300);
+
+            // Sun
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(700, 80, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ground
+            const groundGradient = ctx.createLinearGradient(0, 300, 0, 500);
+            groundGradient.addColorStop(0, '#C2B280');
+            groundGradient.addColorStop(0.5, '#A08050');
+            groundGradient.addColorStop(1, '#8B7355');
+            ctx.fillStyle = groundGradient;
+            ctx.fillRect(0, 300, canvas.width, 200);
+
+            // Simple mountains
+            ctx.fillStyle = '#6B5344';
+            ctx.beginPath();
+            ctx.moveTo(0, 300);
+            ctx.lineTo(150, 200);
+            ctx.lineTo(300, 300);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(200, 300);
+            ctx.lineTo(400, 180);
+            ctx.lineTo(600, 300);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(500, 300);
+            ctx.lineTo(700, 220);
+            ctx.lineTo(860, 300);
+            ctx.fill();
+
+            // Cacti
+            ctx.fillStyle = '#2D5A27';
+            drawCactus(100, 350);
+            drawCactus(750, 380);
+            drawCactus(400, 420);
+        }
+
+        function drawCactus(x, y) {
+            ctx.fillRect(x - 5, y, 10, 50);
+            ctx.fillRect(x - 20, y + 15, 15, 8);
+            ctx.fillRect(x - 20, y + 5, 8, 18);
+            ctx.fillRect(x + 5, y + 25, 15, 8);
+            ctx.fillRect(x + 12, y + 15, 8, 18);
+        }
+
+        function drawLassoLine() {
+            if (lassoPoints.length < 2) return;
+
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(lassoPoints[0].x, lassoPoints[0].y);
+
+            for (let i = 1; i < lassoPoints.length; i++) {
+                ctx.lineTo(lassoPoints[i].x, lassoPoints[i].y);
+            }
+
+            ctx.stroke();
+
+            // Rope texture
+            ctx.strokeStyle = '#D2691E';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawCatchEffects() {
+            catchEffects = catchEffects.filter(effect => {
+                effect.alpha -= 0.02;
+                effect.offsetY -= 2;
+
+                if (effect.alpha <= 0) return false;
+
+                ctx.save();
+                ctx.globalAlpha = effect.alpha;
+                ctx.fillStyle = '#FFD700';
+                ctx.font = 'bold 24px Rye, cursive';
+                ctx.textAlign = 'center';
+                ctx.fillText(`+${effect.points}`, effect.x, effect.y + effect.offsetY);
+                ctx.restore();
+
+                return true;
+            });
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawBackground();
+
+            // Update and draw cattle
+            cattle.forEach(cow => {
+                cow.update();
+                cow.draw();
+            });
+
+            // Check for escaped cattle
+            cattle = cattle.filter(cow => {
+                if (cow.isOffScreen() && !cow.caught) {
+                    escaped++;
+                    updateStats();
+                    return false;
+                }
+                return !cow.caught || !cow.isOffScreen();
+            });
+
+            // Remove caught cattle after a moment
+            cattle = cattle.filter(cow => !cow.caught);
+
+            spawnCattle();
+            drawLassoLine();
+            drawCatchEffects();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            document.getElementById('startOverlay').classList.add('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+
+            gameRunning = true;
+            score = 0;
+            timeLeft = 60;
+            caught = 0;
+            escaped = 0;
+            cattle = [];
+            lassoPoints = [];
+            catchEffects = [];
+
+            updateStats();
+            document.getElementById('timer').textContent = timeLeft;
+
+            // Spawn initial cattle
+            for (let i = 0; i < 3; i++) {
+                const cow = new Cow();
+                cow.x = 100 + Math.random() * 400;
+                cattle.push(cow);
+            }
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            gameLoop();
+        }
+
+        function endGame() {
+            gameRunning = false;
+            clearInterval(timerInterval);
+
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('lassoHighScore', highScore);
+                document.getElementById('highScore').textContent = highScore;
+            }
+
+            // Show results
+            document.getElementById('finalScore').textContent = `You caught ${caught} cattle for ${score} points!`;
+
+            let message = '';
+            if (score >= 500) {
+                message = "Legendary Wrangler! You're the best in the West!";
+            } else if (score >= 300) {
+                message = "Expert Cowboy! The ranch is lucky to have you!";
+            } else if (score >= 150) {
+                message = "Good work, partner! Keep practicing!";
+            } else if (score >= 50) {
+                message = "Not bad for a greenhorn. Try again!";
+            } else {
+                message = "The cattle got away! Better luck next time, tenderfoot.";
+            }
+
+            document.getElementById('finalMessage').textContent = message;
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+        }
+
+        // Initial draw
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground();
+    </script>
+</body>
+</html>
