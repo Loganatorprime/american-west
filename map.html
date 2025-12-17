@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map - The American West</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .map-hero {
-            min-height: 30vh;
-            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.9), rgba(101, 67, 33, 0.85)),
-                        linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #D2691E 100%);
+            min-height: 40vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -19,115 +19,83 @@
         }
 
         .map-hero h1 {
-            font-size: 3rem;
-            color: var(--gold);
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-            letter-spacing: 3px;
+            font-size: 3.5rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
         }
 
         .map-hero p {
             color: var(--parchment);
-            font-size: 1.1rem;
-            margin-top: 10px;
-            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 15px;
         }
 
         .map-section {
-            padding: 40px 0 60px;
-            background: #2c2416;
+            padding: 60px 0;
+            background: var(--parchment);
         }
 
         .map-container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        .map-frame {
-            background: #3d2e1a;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
         .map-wrapper {
             position: relative;
-            border: 3px solid #654321;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+            padding: 20px;
         }
 
-        .map-image-container {
-            position: relative;
-            width: 100%;
-            background: #e8dcc8;
-        }
-
-        .map-image-container img {
+        .map-svg {
             width: 100%;
             height: auto;
             display: block;
         }
 
-        .markers-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        .state {
+            fill: var(--desert-sand);
+            stroke: var(--leather-brown);
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: fill 0.3s ease;
+        }
+
+        .state:hover {
+            fill: var(--sunset-orange);
         }
 
         .marker {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            margin-left: -12px;
-            margin-top: -12px;
             cursor: pointer;
-            pointer-events: auto;
-            transition: transform 0.3s ease;
-            z-index: 10;
         }
 
-        .marker:hover {
-            transform: scale(1.3);
-            z-index: 20;
+        .marker circle {
+            transition: r 0.3s ease, stroke-width 0.3s ease;
         }
 
-        .marker-dot {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid #f4e4bc;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
-                        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+        .marker:hover circle {
+            r: 10;
+            stroke-width: 3;
         }
 
-        .marker.battle .marker-dot { background: linear-gradient(135deg, #a83232, #6b1f1f); }
-        .marker.gold .marker-dot { background: linear-gradient(135deg, #ffd700, #b8860b); }
-        .marker.trail .marker-dot { background: linear-gradient(135deg, #6b8e23, #3d5c14); }
-        .marker.town .marker-dot { background: linear-gradient(135deg, #8b4513, #5c2d0e); }
-        .marker.event .marker-dot { background: linear-gradient(135deg, #cd5c5c, #8b3a3a); }
+        .marker circle {
+            fill: var(--rust-red);
+            stroke: var(--cream);
+            stroke-width: 2;
+        }
+
+        .marker.battle circle { fill: #8b3a3a; }
+        .marker.gold circle { fill: var(--gold); }
+        .marker.trail circle { fill: var(--sage-green); }
+        .marker.town circle { fill: var(--leather-brown); }
 
         .marker-label {
-            position: absolute;
-            left: 28px;
-            top: 50%;
-            transform: translateY(-50%);
-            white-space: nowrap;
-            font-family: 'IM Fell English', serif;
-            font-size: 11px;
-            color: #2c1810;
-            text-shadow: 1px 1px 0 #f4e4bc, -1px -1px 0 #f4e4bc,
-                         1px -1px 0 #f4e4bc, -1px 1px 0 #f4e4bc;
-            font-weight: bold;
+            font-family: 'Lora', serif;
+            font-size: 10px;
+            fill: var(--dark-wood);
             pointer-events: none;
-        }
-
-        .marker-label.left {
-            left: auto;
-            right: 28px;
         }
 
         .info-panel {
@@ -135,138 +103,103 @@
             top: 20px;
             right: 20px;
             width: 300px;
-            background: linear-gradient(135deg, #f5ead6 0%, #e8dcc8 100%);
-            border: 4px solid #654321;
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
             padding: 20px;
-            box-shadow: 0 0 0 2px #b8860b,
-                        5px 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 4px 4px 0 rgba(139, 69, 19, 0.3);
             display: none;
             z-index: 100;
         }
 
         .info-panel.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: slideIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .info-panel h3 {
             font-family: 'Rye', cursive;
-            color: #3d2e1a;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #b8860b;
+            color: var(--leather-brown);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--desert-sand);
         }
 
         .info-panel .location-type {
             display: inline-block;
             padding: 3px 10px;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             margin-bottom: 10px;
-            color: #f4e4bc;
-            font-family: 'Rye', cursive;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-radius: 3px;
+            color: var(--cream);
+            background: var(--rust-red);
         }
 
         .info-panel .location-type.battle { background: #8b3a3a; }
-        .info-panel .location-type.gold { background: linear-gradient(135deg, #b8860b, #daa520); color: #2c1810; }
-        .info-panel .location-type.trail { background: #6b8e23; }
-        .info-panel .location-type.town { background: #8b4513; }
-        .info-panel .location-type.event { background: #cd5c5c; }
+        .info-panel .location-type.gold { background: var(--gold); color: var(--dark-wood); }
+        .info-panel .location-type.trail { background: var(--sage-green); color: var(--dark-wood); }
+        .info-panel .location-type.town { background: var(--leather-brown); }
 
         .info-panel p {
-            font-family: 'IM Fell English', serif;
             font-size: 0.95rem;
             line-height: 1.6;
-            color: #2c1810;
+            color: var(--dark-wood);
         }
 
         .info-panel .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #654321;
-            border: 2px solid #b8860b;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            font-size: 1.1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
-            color: #f4e4bc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            line-height: 1;
+            color: var(--leather-brown);
         }
 
-        .info-panel .close-btn:hover {
-            background: #b8860b;
-            color: #2c1810;
-        }
+        .info-panel .close-btn:hover { color: var(--rust-red); }
 
         .legend {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            margin-top: 20px;
-            padding: 15px 25px;
-            background: linear-gradient(135deg, #f5ead6 0%, #e8dcc8 100%);
-            border: 3px solid #654321;
-            box-shadow: 0 0 0 2px #b8860b;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
         }
 
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: 'IM Fell English', serif;
             font-size: 0.9rem;
-            color: #2c1810;
         }
 
         .legend-dot {
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            border: 2px solid #f4e4bc;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--cream);
+            box-shadow: 0 0 0 1px var(--leather-brown);
         }
 
-        .legend-dot.battle { background: linear-gradient(135deg, #a83232, #6b1f1f); }
-        .legend-dot.gold { background: linear-gradient(135deg, #ffd700, #b8860b); }
-        .legend-dot.trail { background: linear-gradient(135deg, #6b8e23, #3d5c14); }
-        .legend-dot.town { background: linear-gradient(135deg, #8b4513, #5c2d0e); }
-        .legend-dot.event { background: linear-gradient(135deg, #cd5c5c, #8b3a3a); }
+        .legend-dot.battle { background: #8b3a3a; }
+        .legend-dot.gold { background: var(--gold); }
+        .legend-dot.trail { background: var(--sage-green); }
+        .legend-dot.town { background: var(--leather-brown); }
+        .legend-dot.event { background: var(--rust-red); }
 
         .map-instructions {
             text-align: center;
-            margin-bottom: 20px;
-            color: #b8860b;
-            font-family: 'IM Fell English', serif;
+            margin-bottom: 30px;
+            color: var(--rust-red);
             font-style: italic;
-            font-size: 1.1rem;
-        }
-
-        .map-credit {
-            text-align: center;
-            margin-top: 15px;
-            font-family: 'IM Fell English', serif;
-            font-size: 0.85rem;
-            color: #b8860b;
-            font-style: italic;
-        }
-
-        .map-credit a {
-            color: #daa520;
         }
 
         @media (max-width: 900px) {
@@ -279,28 +212,8 @@
                 width: 100%;
                 max-height: 50vh;
                 overflow-y: auto;
-                border-radius: 15px 15px 0 0;
             }
-
-            .map-hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .marker {
-                width: 20px;
-                height: 20px;
-                margin-left: -10px;
-                margin-top: -10px;
-            }
-
-            .marker-label {
-                font-size: 9px;
-            }
-
-            .legend {
-                gap: 12px;
-                padding: 12px 15px;
-            }
+            .map-hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -330,55 +243,116 @@
 
     <main class="map-section">
         <div class="map-container">
-            <p class="map-instructions">Click on the markers to discover key locations in Western history</p>
+            <p class="map-instructions">Click on the markers to learn about key locations in Western history</p>
 
-            <div class="map-frame">
-                <div class="map-wrapper">
-                    <div class="map-image-container">
-                        <!-- 1850 Political Map of the United States - Gold Rush Era -->
-                        <img src="oldmap.jpg"
-                             alt="1850 Political Map of the United States"
-                             id="map-image">
+            <div class="map-wrapper">
+                <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Western States -->
+                    <path class="state" d="M120,30 L180,30 L185,35 L190,80 L140,85 L100,80 L95,50 Z" data-state="Washington"/>
+                    <path class="state" d="M100,80 L140,85 L190,80 L195,130 L185,160 L130,165 L90,140 L85,100 Z" data-state="Oregon"/>
+                    <path class="state" d="M90,140 L130,165 L140,220 L130,280 L100,340 L70,350 L50,300 L55,220 L70,160 Z" data-state="California"/>
+                    <path class="state" d="M130,165 L185,160 L200,170 L190,280 L140,290 L130,280 L140,220 Z" data-state="Nevada"/>
+                    <path class="state" d="M190,80 L240,75 L250,85 L255,140 L230,160 L200,170 L185,160 L195,130 Z" data-state="Idaho"/>
+                    <path class="state" d="M240,75 L190,80 L185,35 L200,25 L350,20 L360,80 L260,85 Z" data-state="Montana"/>
+                    <path class="state" d="M260,85 L360,80 L370,160 L260,165 L255,140 L250,85 Z" data-state="Wyoming"/>
+                    <path class="state" d="M200,170 L230,160 L260,165 L265,180 L260,260 L190,265 L190,280 Z" data-state="Utah"/>
+                    <path class="state" d="M265,180 L370,175 L380,260 L270,265 L260,260 Z" data-state="Colorado"/>
+                    <path class="state" d="M140,290 L190,280 L190,265 L260,260 L270,265 L275,350 L200,380 L130,370 L100,340 Z" data-state="Arizona"/>
+                    <path class="state" d="M270,265 L380,260 L390,355 L395,390 L285,395 L275,350 Z" data-state="New Mexico"/>
+                    <path class="state" d="M360,80 L350,20 L460,15 L470,75 L370,80 Z" data-state="North Dakota"/>
+                    <path class="state" d="M370,80 L470,75 L480,150 L375,155 L370,160 Z" data-state="South Dakota"/>
+                    <path class="state" d="M375,155 L480,150 L500,165 L490,220 L380,225 L370,175 Z" data-state="Nebraska"/>
+                    <path class="state" d="M380,225 L490,220 L500,290 L390,295 L380,260 Z" data-state="Kansas"/>
+                    <path class="state" d="M390,295 L500,290 L510,300 L520,360 L400,365 L390,355 Z" data-state="Oklahoma"/>
+                    <path class="state" d="M395,390 L390,355 L400,365 L520,360 L540,380 L560,450 L500,480 L400,470 L350,430 L320,400 L285,395 Z" data-state="Texas"/>
 
-                        <!-- Markers overlay -->
-                        <div class="markers-overlay" id="markers-overlay">
-                            <!-- Markers will be positioned via JavaScript -->
-                        </div>
-                    </div>
+                    <!-- Rivers -->
+                    <path d="M350,20 Q400,100 450,200 Q480,300 520,380" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
+                    <path d="M100,120 Q150,180 130,280" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
 
-                    <!-- Info Panel -->
-                    <div class="info-panel" id="info-panel">
-                        <button class="close-btn" onclick="closeInfo()">&times;</button>
-                        <span class="location-type" id="location-type">Event</span>
-                        <h3 id="location-title">Location Name</h3>
-                        <p id="location-desc">Description goes here.</p>
-                    </div>
+                    <!-- Trail Lines -->
+                    <path d="M480,240 Q400,200 310,130 Q250,100 150,110 Q100,130 70,200" fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="280" y="95" font-size="10" fill="#9CAF88" font-style="italic">Oregon Trail</text>
+
+                    <path d="M480,240 Q420,270 310,310" fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="380" y="300" font-size="10" fill="#9CAF88" font-style="italic">Santa Fe Trail</text>
+
+                    <path d="M420,420 Q430,350 420,260" fill="none" stroke="#CD853F" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="435" y="350" font-size="10" fill="#CD853F" font-style="italic">Chisholm Trail</text>
+
+                    <!-- Markers -->
+                    <g class="marker event" onclick="showInfo('promontory')">
+                        <circle cx="215" cy="185" r="8"/>
+                        <text class="marker-label" x="225" y="188">Promontory</text>
+                    </g>
+                    <g class="marker gold" onclick="showInfo('sutters')">
+                        <circle cx="95" cy="190" r="8"/>
+                        <text class="marker-label" x="105" y="193">Sutter's Mill</text>
+                    </g>
+                    <g class="marker town" onclick="showInfo('tombstone')">
+                        <circle cx="200" cy="340" r="8"/>
+                        <text class="marker-label" x="210" y="343">Tombstone</text>
+                    </g>
+                    <g class="marker battle" onclick="showInfo('littlebighorn')">
+                        <circle cx="300" cy="55" r="8"/>
+                        <text class="marker-label" x="310" y="58">Little Bighorn</text>
+                    </g>
+                    <g class="marker battle" onclick="showInfo('woundedknee')">
+                        <circle cx="420" cy="120" r="8"/>
+                        <text class="marker-label" x="430" y="123">Wounded Knee</text>
+                    </g>
+                    <g class="marker battle" onclick="showInfo('alamo')">
+                        <circle cx="420" cy="420" r="8"/>
+                        <text class="marker-label" x="430" y="423">The Alamo</text>
+                    </g>
+                    <g class="marker town" onclick="showInfo('dodge')">
+                        <circle cx="420" cy="260" r="8"/>
+                        <text class="marker-label" x="430" y="263">Dodge City</text>
+                    </g>
+                    <g class="marker town" onclick="showInfo('deadwood')">
+                        <circle cx="400" cy="100" r="8"/>
+                        <text class="marker-label" x="410" y="103">Deadwood</text>
+                    </g>
+                    <g class="marker town" onclick="showInfo('denver')">
+                        <circle cx="320" cy="210" r="8"/>
+                        <text class="marker-label" x="330" y="213">Denver</text>
+                    </g>
+                    <g class="marker trail" onclick="showInfo('santafe')">
+                        <circle cx="310" cy="310" r="8"/>
+                        <text class="marker-label" x="320" y="313">Santa Fe</text>
+                    </g>
+                    <g class="marker trail" onclick="showInfo('independence')">
+                        <circle cx="480" cy="240" r="8"/>
+                        <text class="marker-label" x="450" y="255">Independence</text>
+                    </g>
+                    <g class="marker gold" onclick="showInfo('virginiacitynv')">
+                        <circle cx="155" cy="190" r="8"/>
+                        <text class="marker-label" x="130" y="205">Virginia City</text>
+                    </g>
+                    <g class="marker trail" onclick="showInfo('laramie')">
+                        <circle cx="310" cy="130" r="8"/>
+                        <text class="marker-label" x="320" y="133">Ft. Laramie</text>
+                    </g>
+                    <g class="marker town" onclick="showInfo('sanfrancisco')">
+                        <circle cx="70" cy="200" r="8"/>
+                        <text class="marker-label" x="45" y="215">San Francisco</text>
+                    </g>
+                </svg>
+
+                <div class="info-panel" id="info-panel">
+                    <button class="close-btn" onclick="closeInfo()">&times;</button>
+                    <span class="location-type" id="location-type">Event</span>
+                    <h3 id="location-title">Location Name</h3>
+                    <p id="location-desc">Description goes here.</p>
                 </div>
             </div>
 
-            <p class="map-credit">1850 Political Map of the United States - <a href="https://www.census.gov/library/visualizations/1850/dec/political-map.html" target="_blank">U.S. Census Bureau</a></p>
-
             <div class="legend">
-                <div class="legend-item">
-                    <span class="legend-dot battle"></span>
-                    <span>Battles</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot gold"></span>
-                    <span>Gold Rush Sites</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot trail"></span>
-                    <span>Trail Landmarks</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot town"></span>
-                    <span>Famous Towns</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot event"></span>
-                    <span>Historic Events</span>
-                </div>
+                <div class="legend-item"><span class="legend-dot battle"></span><span>Battles</span></div>
+                <div class="legend-item"><span class="legend-dot gold"></span><span>Gold Rush Sites</span></div>
+                <div class="legend-item"><span class="legend-dot trail"></span><span>Trail Landmarks</span></div>
+                <div class="legend-item"><span class="legend-dot town"></span><span>Famous Towns</span></div>
+                <div class="legend-item"><span class="legend-dot event"></span><span>Historic Events</span></div>
             </div>
         </div>
     </main>
@@ -396,239 +370,64 @@
         </div>
     </footer>
 
-    <!-- Music Player -->
-    <div class="music-player" id="music-player">
+    <div class="music-player">
         <audio id="bg-music" loop>
             <source src="https://archive.org/download/CowboyAndHoboSongs/01OldChisholmTrail.mp3" type="audio/mpeg">
         </audio>
         <button type="button" class="music-btn" id="music-btn" onclick="toggleMusic()">
-            <span class="music-icon" id="music-icon">&#9835;</span>
+            <span class="music-icon">&#9835;</span>
             <span class="music-text" id="music-text">Play Music</span>
         </button>
     </div>
 
     <style>
-        .music-player {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-
-        .music-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: var(--dark-wood);
-            color: var(--gold);
-            border: 3px solid var(--gold);
-            font-family: 'Rye', cursive;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .music-btn:hover {
-            background: var(--leather-brown);
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .music-btn.playing {
-            background: var(--gold);
-            color: var(--dark-wood);
-        }
-
-        .music-icon {
-            font-size: 1.2rem;
-        }
-
-        .music-btn.playing .music-icon {
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
+        .music-player { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .music-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--dark-wood); color: var(--gold); border: 3px solid var(--gold); font-family: 'Rye', cursive; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px 0 rgba(0,0,0,0.3); }
+        .music-btn:hover { background: var(--leather-brown); transform: translate(2px, 2px); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+        .music-btn.playing { background: var(--gold); color: var(--dark-wood); }
+        .music-icon { font-size: 1.2rem; }
     </style>
 
     <script>
-        // Marker positions calibrated to the 1883 map
         const locations = {
-            promontory: {
-                title: "Promontory Summit, Utah",
-                type: "event",
-                x: 23,
-                y: 42,
-                desc: "On May 10, 1869, the Central Pacific and Union Pacific railroads met here, completing the first Transcontinental Railroad. The famous Golden Spike ceremony united East and West, revolutionizing travel and commerce across America."
-            },
-            sutters: {
-                title: "Sutter's Mill, California",
-                type: "gold",
-                x: 13,
-                y: 45,
-                labelLeft: true,
-                desc: "On January 24, 1848, James W. Marshall discovered gold here, sparking the California Gold Rush. Within a year, over 300,000 '49ers' flooded into California, transforming the region and accelerating westward expansion."
-            },
-            tombstone: {
-                title: "Tombstone, Arizona",
-                type: "town",
-                x: 21,
-                y: 62,
-                desc: "Founded in 1879, Tombstone became one of the most famous mining towns of the Old West. It was here on October 26, 1881, that the Gunfight at the O.K. Corral took place between the Earp brothers and the Clanton-McLaury gang."
-            },
-            littlebighorn: {
-                title: "Little Bighorn, Montana",
-                type: "battle",
-                x: 27,
-                y: 28,
-                desc: "On June 25-26, 1876, Lt. Col. George Custer and his 7th Cavalry were defeated by Lakota, Northern Cheyenne, and Arapaho forces led by Sitting Bull and Crazy Horse. This battle marked the height of Native American resistance."
-            },
-            woundedknee: {
-                title: "Wounded Knee, South Dakota",
-                type: "battle",
-                x: 35,
-                y: 33,
-                desc: "On December 29, 1890, U.S. Army troops killed over 250 Lakota men, women, and children at Wounded Knee Creek. This tragic massacre effectively ended the Indian Wars and Native American armed resistance."
-            },
-            alamo: {
-                title: "The Alamo, Texas",
-                type: "battle",
-                x: 37,
-                y: 72,
-                desc: "From February 23 to March 6, 1836, approximately 200 Texan defenders held this former Spanish mission against thousands of Mexican troops. Though all defenders were killed, 'Remember the Alamo!' became a rallying cry for Texas independence."
-            },
-            dodge: {
-                title: "Dodge City, Kansas",
-                type: "town",
-                x: 38,
-                y: 48,
-                desc: "Known as the 'Wickedest Little City in America,' Dodge City was the quintessential cowtown of the 1870s-80s. At the end of the cattle drives on the Chisholm Trail, cowboys, gamblers, and gunslingers filled its famous saloons."
-            },
-            deadwood: {
-                title: "Deadwood, South Dakota",
-                type: "town",
-                x: 34,
-                y: 31,
-                desc: "Founded in 1876 during the Black Hills Gold Rush, Deadwood attracted fortune seekers, outlaws, and legends. Wild Bill Hickok was shot and killed here in 1876, and Calamity Jane made it her home."
-            },
-            denver: {
-                title: "Denver, Colorado",
-                type: "town",
-                x: 30,
-                y: 46,
-                desc: "Founded in 1858 during the Pike's Peak Gold Rush, Denver grew from a mining camp into the 'Queen City of the Plains.' It became a major supply hub for miners heading into the Rocky Mountains."
-            },
-            santafe: {
-                title: "Santa Fe, New Mexico",
-                type: "trail",
-                x: 27,
-                y: 56,
-                desc: "One of the oldest cities in the U.S., Santa Fe was the terminus of the famous Santa Fe Trail. This 900-mile trade route connected Missouri to the Southwest, bringing goods, settlers, and cultures together."
-            },
-            independence: {
-                title: "Independence, Missouri",
-                type: "trail",
-                x: 44,
-                y: 47,
-                desc: "Known as the 'Queen City of the Trails,' Independence was the starting point for the Oregon, California, and Santa Fe trails. Thousands of pioneers gathered here to stock up before their westward journey."
-            },
-            virginiacitynv: {
-                title: "Virginia City, Nevada",
-                type: "gold",
-                x: 16,
-                y: 43,
-                desc: "Site of the legendary Comstock Lode discovered in 1859, Virginia City became one of the richest silver mining towns in the West. At its peak, it was the most important city between Denver and San Francisco."
-            },
-            laramie: {
-                title: "Fort Laramie, Wyoming",
-                type: "trail",
-                x: 30,
-                y: 38,
-                desc: "Originally a fur trading post, Fort Laramie became a crucial supply stop and military outpost on the Oregon Trail. It was also the site of important treaties with Native American tribes."
-            },
-            sanfrancisco: {
-                title: "San Francisco, California",
-                type: "town",
-                x: 10,
-                y: 47,
-                labelLeft: true,
-                desc: "The Gold Rush transformed San Francisco from a small settlement into a booming city. By 1850, it was the largest city in the West, serving as the gateway for prospectors and the center of western commerce."
-            }
+            promontory: { title: "Promontory Summit, Utah", type: "event", desc: "On May 10, 1869, the Central Pacific and Union Pacific railroads met here, completing the first Transcontinental Railroad. The famous Golden Spike ceremony united East and West." },
+            sutters: { title: "Sutter's Mill, California", type: "gold", desc: "On January 24, 1848, James W. Marshall discovered gold here, sparking the California Gold Rush. Within a year, over 300,000 '49ers' flooded into California." },
+            tombstone: { title: "Tombstone, Arizona", type: "town", desc: "Founded in 1879, Tombstone became famous for the Gunfight at the O.K. Corral on October 26, 1881, between the Earp brothers and the Clanton-McLaury gang." },
+            littlebighorn: { title: "Little Bighorn, Montana", type: "battle", desc: "On June 25-26, 1876, Lt. Col. George Custer and his 7th Cavalry were defeated by Lakota, Northern Cheyenne, and Arapaho forces led by Sitting Bull and Crazy Horse." },
+            woundedknee: { title: "Wounded Knee, South Dakota", type: "battle", desc: "On December 29, 1890, U.S. Army troops killed over 250 Lakota men, women, and children. This massacre effectively ended the Indian Wars." },
+            alamo: { title: "The Alamo, Texas", type: "battle", desc: "From February 23 to March 6, 1836, approximately 200 Texan defenders held this mission against thousands of Mexican troops. 'Remember the Alamo!' became a rallying cry." },
+            dodge: { title: "Dodge City, Kansas", type: "town", desc: "Known as the 'Wickedest Little City in America,' Dodge City was the quintessential cowtown of the 1870s-80s at the end of the Chisholm Trail cattle drives." },
+            deadwood: { title: "Deadwood, South Dakota", type: "town", desc: "Founded in 1876 during the Black Hills Gold Rush. Wild Bill Hickok was shot and killed here in 1876, and Calamity Jane made it her home." },
+            denver: { title: "Denver, Colorado", type: "town", desc: "Founded in 1858 during the Pike's Peak Gold Rush, Denver grew from a mining camp into the 'Queen City of the Plains.'" },
+            santafe: { title: "Santa Fe, New Mexico", type: "trail", desc: "One of the oldest cities in the U.S., Santa Fe was the terminus of the famous Santa Fe Trail, a 900-mile trade route from Missouri." },
+            independence: { title: "Independence, Missouri", type: "trail", desc: "Known as the 'Queen City of the Trails,' Independence was the starting point for the Oregon, California, and Santa Fe trails." },
+            virginiacitynv: { title: "Virginia City, Nevada", type: "gold", desc: "Site of the legendary Comstock Lode discovered in 1859, Virginia City became one of the richest silver mining towns in the West." },
+            laramie: { title: "Fort Laramie, Wyoming", type: "trail", desc: "Originally a fur trading post, Fort Laramie became a crucial supply stop on the Oregon Trail and site of important treaties." },
+            sanfrancisco: { title: "San Francisco, California", type: "town", desc: "The Gold Rush transformed San Francisco into the largest city in the West by 1850, serving as the gateway for prospectors." }
         };
 
-        function createMarkers() {
-            const overlay = document.getElementById('markers-overlay');
-            overlay.innerHTML = '';
-
-            for (const [id, loc] of Object.entries(locations)) {
-                const marker = document.createElement('div');
-                marker.className = `marker ${loc.type}`;
-                marker.style.left = `${loc.x}%`;
-                marker.style.top = `${loc.y}%`;
-                marker.onclick = () => showInfo(id);
-
-                const dot = document.createElement('div');
-                dot.className = 'marker-dot';
-                marker.appendChild(dot);
-
-                const label = document.createElement('span');
-                label.className = `marker-label${loc.labelLeft ? ' left' : ''}`;
-                label.textContent = loc.title.split(',')[0];
-                marker.appendChild(label);
-
-                overlay.appendChild(marker);
-            }
+        function showInfo(id) {
+            const loc = locations[id];
+            document.getElementById('location-title').textContent = loc.title;
+            document.getElementById('location-desc').textContent = loc.desc;
+            document.getElementById('location-type').textContent = loc.type.charAt(0).toUpperCase() + loc.type.slice(1);
+            document.getElementById('location-type').className = 'location-type ' + loc.type;
+            document.getElementById('info-panel').classList.add('active');
         }
 
-        function showInfo(locationId) {
-            const location = locations[locationId];
-            const panel = document.getElementById('info-panel');
-            const typeEl = document.getElementById('location-type');
-            const titleEl = document.getElementById('location-title');
-            const descEl = document.getElementById('location-desc');
+        function closeInfo() { document.getElementById('info-panel').classList.remove('active'); }
 
-            titleEl.textContent = location.title;
-            descEl.textContent = location.desc;
-
-            typeEl.textContent = location.type.charAt(0).toUpperCase() + location.type.slice(1);
-            typeEl.className = 'location-type ' + location.type;
-
-            panel.classList.add('active');
-        }
-
-        function closeInfo() {
-            document.getElementById('info-panel').classList.remove('active');
-        }
+        document.querySelector('.map-svg').addEventListener('click', function(e) {
+            if (!e.target.closest('.marker')) closeInfo();
+        });
 
         function toggleMusic() {
             const music = document.getElementById('bg-music');
             const btn = document.getElementById('music-btn');
             const text = document.getElementById('music-text');
-
-            if (music.paused) {
-                music.play();
-                btn.classList.add('playing');
-                text.textContent = 'Pause';
-            } else {
-                music.pause();
-                btn.classList.remove('playing');
-                text.textContent = 'Play Music';
-            }
+            if (music.paused) { music.play(); btn.classList.add('playing'); text.textContent = 'Pause'; }
+            else { music.pause(); btn.classList.remove('playing'); text.textContent = 'Play Music'; }
         }
-
-        // Initialize markers when page loads
-        document.addEventListener('DOMContentLoaded', createMarkers);
-
-        // Close panel when clicking outside
-        document.querySelector('.map-wrapper').addEventListener('click', function(e) {
-            if (!e.target.closest('.marker') && !e.target.closest('.info-panel')) {
-                closeInfo();
-            }
-        });
     </script>
 </body>
 </html>
