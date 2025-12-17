@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map - The American West</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .map-hero {
+            min-height: 40vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.8), rgba(139, 69, 19, 0.7)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .map-hero h1 {
+            font-size: 3.5rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .map-hero p {
+            color: var(--parchment);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .map-section {
+            padding: 60px 0;
+            background: var(--parchment);
+        }
+
+        .map-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .map-wrapper {
+            position: relative;
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            box-shadow: 8px 8px 0 rgba(139, 69, 19, 0.3);
+            padding: 20px;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .state {
+            fill: var(--desert-sand);
+            stroke: var(--leather-brown);
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: fill 0.3s ease;
+        }
+
+        .state:hover {
+            fill: var(--sunset-orange);
+        }
+
+        .state.active {
+            fill: var(--gold);
+        }
+
+        .marker {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .marker:hover {
+            transform: scale(1.3);
+        }
+
+        .marker circle {
+            fill: var(--rust-red);
+            stroke: var(--cream);
+            stroke-width: 2;
+        }
+
+        .marker.battle circle {
+            fill: #8b3a3a;
+        }
+
+        .marker.gold circle {
+            fill: var(--gold);
+        }
+
+        .marker.trail circle {
+            fill: var(--sage-green);
+        }
+
+        .marker.town circle {
+            fill: var(--leather-brown);
+        }
+
+        .marker-label {
+            font-family: 'Lora', serif;
+            font-size: 10px;
+            fill: var(--dark-wood);
+            pointer-events: none;
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
+            padding: 20px;
+            box-shadow: 4px 4px 0 rgba(139, 69, 19, 0.3);
+            display: none;
+            z-index: 100;
+        }
+
+        .info-panel.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .info-panel h3 {
+            font-family: 'Rye', cursive;
+            color: var(--leather-brown);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--desert-sand);
+        }
+
+        .info-panel .location-type {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            color: var(--cream);
+            background: var(--rust-red);
+        }
+
+        .info-panel .location-type.battle {
+            background: #8b3a3a;
+        }
+
+        .info-panel .location-type.gold {
+            background: var(--gold);
+            color: var(--dark-wood);
+        }
+
+        .info-panel .location-type.trail {
+            background: var(--sage-green);
+            color: var(--dark-wood);
+        }
+
+        .info-panel .location-type.town {
+            background: var(--leather-brown);
+        }
+
+        .info-panel p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dark-wood);
+        }
+
+        .info-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--leather-brown);
+        }
+
+        .info-panel .close-btn:hover {
+            color: var(--rust-red);
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--cream);
+            border: 3px solid var(--leather-brown);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--cream);
+            box-shadow: 0 0 0 1px var(--leather-brown);
+        }
+
+        .legend-dot.battle { background: #8b3a3a; }
+        .legend-dot.gold { background: var(--gold); }
+        .legend-dot.trail { background: var(--sage-green); }
+        .legend-dot.town { background: var(--leather-brown); }
+        .legend-dot.event { background: var(--rust-red); }
+
+        .map-instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--rust-red);
+            font-style: italic;
+        }
+
+        @media (max-width: 900px) {
+            .info-panel {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                max-height: 50vh;
+                overflow-y: auto;
+            }
+
+            .map-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#timeline">Timeline</a></li>
+                <li><a href="map.html">Map</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="map-hero">
+        <div class="container">
+            <h1>Map of the West</h1>
+            <p>Explore the landmarks, trails, and battlefields of the frontier</p>
+        </div>
+    </section>
+
+    <main class="map-section">
+        <div class="map-container">
+            <p class="map-instructions">Click on the markers to learn about key locations in Western history</p>
+
+            <div class="map-wrapper">
+                <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Western States -->
+                    <!-- Washington -->
+                    <path class="state" d="M120,30 L180,30 L185,35 L190,80 L140,85 L100,80 L95,50 Z" data-state="Washington"/>
+
+                    <!-- Oregon -->
+                    <path class="state" d="M100,80 L140,85 L190,80 L195,130 L185,160 L130,165 L90,140 L85,100 Z" data-state="Oregon"/>
+
+                    <!-- California -->
+                    <path class="state" d="M90,140 L130,165 L140,220 L130,280 L100,340 L70,350 L50,300 L55,220 L70,160 Z" data-state="California"/>
+
+                    <!-- Nevada -->
+                    <path class="state" d="M130,165 L185,160 L200,170 L190,280 L140,290 L130,280 L140,220 Z" data-state="Nevada"/>
+
+                    <!-- Idaho -->
+                    <path class="state" d="M190,80 L240,75 L250,85 L255,140 L230,160 L200,170 L185,160 L195,130 Z" data-state="Idaho"/>
+
+                    <!-- Montana -->
+                    <path class="state" d="M240,75 L190,80 L185,35 L200,25 L350,20 L360,80 L260,85 Z" data-state="Montana"/>
+
+                    <!-- Wyoming -->
+                    <path class="state" d="M260,85 L360,80 L370,160 L260,165 L255,140 L250,85 Z" data-state="Wyoming"/>
+
+                    <!-- Utah -->
+                    <path class="state" d="M200,170 L230,160 L260,165 L265,180 L260,260 L190,265 L190,280 Z" data-state="Utah"/>
+
+                    <!-- Colorado -->
+                    <path class="state" d="M265,180 L370,175 L380,260 L270,265 L260,260 Z" data-state="Colorado"/>
+
+                    <!-- Arizona -->
+                    <path class="state" d="M140,290 L190,280 L190,265 L260,260 L270,265 L275,350 L200,380 L130,370 L100,340 Z" data-state="Arizona"/>
+
+                    <!-- New Mexico -->
+                    <path class="state" d="M270,265 L380,260 L390,355 L395,390 L285,395 L275,350 Z" data-state="New Mexico"/>
+
+                    <!-- North Dakota -->
+                    <path class="state" d="M360,80 L350,20 L460,15 L470,75 L370,80 Z" data-state="North Dakota"/>
+
+                    <!-- South Dakota -->
+                    <path class="state" d="M370,80 L470,75 L480,150 L375,155 L370,160 Z" data-state="South Dakota"/>
+
+                    <!-- Nebraska -->
+                    <path class="state" d="M375,155 L480,150 L500,165 L490,220 L380,225 L370,175 Z" data-state="Nebraska"/>
+
+                    <!-- Kansas -->
+                    <path class="state" d="M380,225 L490,220 L500,290 L390,295 L380,260 Z" data-state="Kansas"/>
+
+                    <!-- Oklahoma -->
+                    <path class="state" d="M390,295 L500,290 L510,300 L520,360 L400,365 L390,355 Z" data-state="Oklahoma"/>
+
+                    <!-- Texas -->
+                    <path class="state" d="M395,390 L390,355 L400,365 L520,360 L540,380 L560,450 L500,480 L400,470 L350,430 L320,400 L285,395 Z" data-state="Texas"/>
+
+                    <!-- Major Rivers (decorative) -->
+                    <path d="M350,20 Q400,100 450,200 Q480,300 520,380" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
+                    <path d="M100,120 Q150,180 130,280" fill="none" stroke="#6B8E9F" stroke-width="2" opacity="0.5"/>
+
+                    <!-- Markers -->
+                    <!-- Promontory Summit, Utah - Railroad -->
+                    <g class="marker event" data-location="promontory" onclick="showInfo('promontory')">
+                        <circle cx="215" cy="185" r="8"/>
+                        <text class="marker-label" x="225" y="188">Promontory</text>
+                    </g>
+
+                    <!-- Sutter's Mill, California - Gold -->
+                    <g class="marker gold" data-location="sutters" onclick="showInfo('sutters')">
+                        <circle cx="95" cy="190" r="8"/>
+                        <text class="marker-label" x="105" y="193">Sutter's Mill</text>
+                    </g>
+
+                    <!-- Tombstone, Arizona -->
+                    <g class="marker town" data-location="tombstone" onclick="showInfo('tombstone')">
+                        <circle cx="200" cy="340" r="8"/>
+                        <text class="marker-label" x="210" y="343">Tombstone</text>
+                    </g>
+
+                    <!-- Little Bighorn, Montana -->
+                    <g class="marker battle" data-location="littlebighorn" onclick="showInfo('littlebighorn')">
+                        <circle cx="300" cy="55" r="8"/>
+                        <text class="marker-label" x="310" y="58">Little Bighorn</text>
+                    </g>
+
+                    <!-- Wounded Knee, South Dakota -->
+                    <g class="marker battle" data-location="woundedknee" onclick="showInfo('woundedknee')">
+                        <circle cx="420" cy="120" r="8"/>
+                        <text class="marker-label" x="430" y="123">Wounded Knee</text>
+                    </g>
+
+                    <!-- The Alamo, Texas -->
+                    <g class="marker battle" data-location="alamo" onclick="showInfo('alamo')">
+                        <circle cx="420" cy="420" r="8"/>
+                        <text class="marker-label" x="430" y="423">The Alamo</text>
+                    </g>
+
+                    <!-- Dodge City, Kansas -->
+                    <g class="marker town" data-location="dodge" onclick="showInfo('dodge')">
+                        <circle cx="420" cy="260" r="8"/>
+                        <text class="marker-label" x="430" y="263">Dodge City</text>
+                    </g>
+
+                    <!-- Deadwood, South Dakota -->
+                    <g class="marker town" data-location="deadwood" onclick="showInfo('deadwood')">
+                        <circle cx="400" cy="100" r="8"/>
+                        <text class="marker-label" x="410" y="103">Deadwood</text>
+                    </g>
+
+                    <!-- Denver, Colorado -->
+                    <g class="marker town" data-location="denver" onclick="showInfo('denver')">
+                        <circle cx="320" cy="210" r="8"/>
+                        <text class="marker-label" x="330" y="213">Denver</text>
+                    </g>
+
+                    <!-- Santa Fe, New Mexico -->
+                    <g class="marker trail" data-location="santafe" onclick="showInfo('santafe')">
+                        <circle cx="310" cy="310" r="8"/>
+                        <text class="marker-label" x="320" y="313">Santa Fe</text>
+                    </g>
+
+                    <!-- Oregon Trail Start - Independence, MO (edge of map) -->
+                    <g class="marker trail" data-location="independence" onclick="showInfo('independence')">
+                        <circle cx="480" cy="240" r="8"/>
+                        <text class="marker-label" x="450" y="255">Independence</text>
+                    </g>
+
+                    <!-- Virginia City, Nevada -->
+                    <g class="marker gold" data-location="virginiacitynv" onclick="showInfo('virginiacitynv')">
+                        <circle cx="155" cy="190" r="8"/>
+                        <text class="marker-label" x="130" y="205">Virginia City</text>
+                    </g>
+
+                    <!-- Fort Laramie, Wyoming -->
+                    <g class="marker trail" data-location="laramie" onclick="showInfo('laramie')">
+                        <circle cx="310" cy="130" r="8"/>
+                        <text class="marker-label" x="320" y="133">Ft. Laramie</text>
+                    </g>
+
+                    <!-- San Francisco -->
+                    <g class="marker town" data-location="sanfrancisco" onclick="showInfo('sanfrancisco')">
+                        <circle cx="70" cy="200" r="8"/>
+                        <text class="marker-label" x="45" y="215">San Francisco</text>
+                    </g>
+
+                    <!-- Trail Lines (Oregon Trail) -->
+                    <path d="M480,240 Q400,200 310,130 Q250,100 150,110 Q100,130 70,200"
+                          fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="280" y="95" font-size="10" fill="#9CAF88" font-style="italic">Oregon Trail</text>
+
+                    <!-- Santa Fe Trail -->
+                    <path d="M480,240 Q420,270 310,310"
+                          fill="none" stroke="#9CAF88" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="380" y="300" font-size="10" fill="#9CAF88" font-style="italic">Santa Fe Trail</text>
+
+                    <!-- Chisholm Trail -->
+                    <path d="M420,420 Q430,350 420,260"
+                          fill="none" stroke="#CD853F" stroke-width="3" stroke-dasharray="8,4" opacity="0.7"/>
+                    <text x="435" y="350" font-size="10" fill="#CD853F" font-style="italic">Chisholm Trail</text>
+                </svg>
+
+                <!-- Info Panel -->
+                <div class="info-panel" id="info-panel">
+                    <button class="close-btn" onclick="closeInfo()">&times;</button>
+                    <span class="location-type" id="location-type">Event</span>
+                    <h3 id="location-title">Location Name</h3>
+                    <p id="location-desc">Description goes here.</p>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot battle"></span>
+                    <span>Battles</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot gold"></span>
+                    <span>Gold Rush Sites</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot trail"></span>
+                    <span>Trail Landmarks</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot town"></span>
+                    <span>Famous Towns</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot event"></span>
+                    <span>Historic Events</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+            <div class="footer-bottom">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Music Player -->
+    <div class="music-player" id="music-player">
+        <audio id="bg-music" loop>
+            <source src="https://archive.org/download/CowboyAndHoboSongs/01OldChisholmTrail.mp3" type="audio/mpeg">
+        </audio>
+        <button type="button" class="music-btn" id="music-btn" onclick="toggleMusic()">
+            <span class="music-icon" id="music-icon">&#9835;</span>
+            <span class="music-text" id="music-text">Play Music</span>
+        </button>
+    </div>
+
+    <style>
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--dark-wood);
+            color: var(--gold);
+            border: 3px solid var(--gold);
+            font-family: 'Rye', cursive;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn:hover {
+            background: var(--leather-brown);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn.playing {
+            background: var(--gold);
+            color: var(--dark-wood);
+        }
+
+        .music-icon {
+            font-size: 1.2rem;
+        }
+
+        .music-btn.playing .music-icon {
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+
+    <script>
+        const locations = {
+            promontory: {
+                title: "Promontory Summit, Utah",
+                type: "event",
+                desc: "On May 10, 1869, the Central Pacific and Union Pacific railroads met here, completing the first Transcontinental Railroad. The famous Golden Spike ceremony united East and West, revolutionizing travel and commerce across America."
+            },
+            sutters: {
+                title: "Sutter's Mill, California",
+                type: "gold",
+                desc: "On January 24, 1848, James W. Marshall discovered gold here, sparking the California Gold Rush. Within a year, over 300,000 '49ers' flooded into California, transforming the region and accelerating westward expansion."
+            },
+            tombstone: {
+                title: "Tombstone, Arizona",
+                type: "town",
+                desc: "Founded in 1879, Tombstone became one of the most famous mining towns of the Old West. It was here on October 26, 1881, that the Gunfight at the O.K. Corral took place between the Earp brothers and the Clanton-McLaury gang."
+            },
+            littlebighorn: {
+                title: "Little Bighorn, Montana",
+                type: "battle",
+                desc: "On June 25-26, 1876, Lt. Col. George Custer and his 7th Cavalry were defeated by Lakota, Northern Cheyenne, and Arapaho forces led by Sitting Bull and Crazy Horse. This battle marked the height of Native American resistance."
+            },
+            woundedknee: {
+                title: "Wounded Knee, South Dakota",
+                type: "battle",
+                desc: "On December 29, 1890, U.S. Army troops killed over 250 Lakota men, women, and children at Wounded Knee Creek. This tragic massacre effectively ended the Indian Wars and Native American armed resistance."
+            },
+            alamo: {
+                title: "The Alamo, Texas",
+                type: "battle",
+                desc: "From February 23 to March 6, 1836, approximately 200 Texan defenders held this former Spanish mission against thousands of Mexican troops. Though all defenders were killed, 'Remember the Alamo!' became a rallying cry for Texas independence."
+            },
+            dodge: {
+                title: "Dodge City, Kansas",
+                type: "town",
+                desc: "Known as the 'Wickedest Little City in America,' Dodge City was the quintessential cowtown of the 1870s-80s. At the end of the cattle drives on the Chisholm Trail, cowboys, gamblers, and gunslingers filled its famous saloons."
+            },
+            deadwood: {
+                title: "Deadwood, South Dakota",
+                type: "town",
+                desc: "Founded in 1876 during the Black Hills Gold Rush, Deadwood attracted fortune seekers, outlaws, and legends. Wild Bill Hickok was shot and killed here in 1876, and Calamity Jane made it her home."
+            },
+            denver: {
+                title: "Denver, Colorado",
+                type: "town",
+                desc: "Founded in 1858 during the Pike's Peak Gold Rush, Denver grew from a mining camp into the 'Queen City of the Plains.' It became a major supply hub for miners heading into the Rocky Mountains."
+            },
+            santafe: {
+                title: "Santa Fe, New Mexico",
+                type: "trail",
+                desc: "One of the oldest cities in the U.S., Santa Fe was the terminus of the famous Santa Fe Trail. This 900-mile trade route connected Missouri to the Southwest, bringing goods, settlers, and cultures together."
+            },
+            independence: {
+                title: "Independence, Missouri",
+                type: "trail",
+                desc: "Known as the 'Queen City of the Trails,' Independence was the starting point for the Oregon, California, and Santa Fe trails. Thousands of pioneers gathered here to stock up before their westward journey."
+            },
+            virginiacitynv: {
+                title: "Virginia City, Nevada",
+                type: "gold",
+                desc: "Site of the legendary Comstock Lode discovered in 1859, Virginia City became one of the richest silver mining towns in the West. At its peak, it was the most important city between Denver and San Francisco."
+            },
+            laramie: {
+                title: "Fort Laramie, Wyoming",
+                type: "trail",
+                desc: "Originally a fur trading post, Fort Laramie became a crucial supply stop and military outpost on the Oregon Trail. It was also the site of important treaties with Native American tribes."
+            },
+            sanfrancisco: {
+                title: "San Francisco, California",
+                type: "town",
+                desc: "The Gold Rush transformed San Francisco from a small settlement into a booming city. By 1850, it was the largest city in the West, serving as the gateway for prospectors and the center of western commerce."
+            }
+        };
+
+        function showInfo(locationId) {
+            const location = locations[locationId];
+            const panel = document.getElementById('info-panel');
+            const typeEl = document.getElementById('location-type');
+            const titleEl = document.getElementById('location-title');
+            const descEl = document.getElementById('location-desc');
+
+            // Update content
+            titleEl.textContent = location.title;
+            descEl.textContent = location.desc;
+
+            // Update type badge
+            typeEl.textContent = location.type.charAt(0).toUpperCase() + location.type.slice(1);
+            typeEl.className = 'location-type ' + location.type;
+
+            // Show panel
+            panel.classList.add('active');
+        }
+
+        function closeInfo() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+
+        // Close panel when clicking outside
+        document.querySelector('.map-svg').addEventListener('click', function(e) {
+            if (!e.target.closest('.marker')) {
+                closeInfo();
+            }
+        });
+
+        // Music toggle
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-btn');
+            const text = document.getElementById('music-text');
+
+            if (music.paused) {
+                music.play();
+                btn.classList.add('playing');
+                text.textContent = 'Pause';
+            } else {
+                music.pause();
+                btn.classList.remove('playing');
+                text.textContent = 'Play Music';
+            }
+        }
+    </script>
+</body>
+</html>
