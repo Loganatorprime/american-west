@@ -334,5 +334,97 @@
             </div>
         </div>
     </footer>
+
+    <!-- Music Player -->
+    <div class="music-player" id="music-player">
+        <audio id="bg-music" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+        <button class="music-btn" id="music-btn" onclick="toggleMusic()">
+            <span class="music-icon" id="music-icon">&#9835;</span>
+            <span class="music-text" id="music-text">Play Music</span>
+        </button>
+    </div>
+
+    <style>
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--dark-wood);
+            color: var(--gold);
+            border: 3px solid var(--gold);
+            font-family: 'Rye', cursive;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn:hover {
+            background: var(--leather-brown);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn.playing {
+            background: var(--gold);
+            color: var(--dark-wood);
+        }
+
+        .music-icon {
+            font-size: 1.2rem;
+        }
+
+        .music-btn.playing .music-icon {
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .music-text {
+                display: none;
+            }
+
+            .music-btn {
+                padding: 12px;
+            }
+        }
+    </style>
+
+    <script>
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-btn');
+            const text = document.getElementById('music-text');
+
+            if (music.paused) {
+                music.play();
+                btn.classList.add('playing');
+                text.textContent = 'Pause';
+            } else {
+                music.pause();
+                btn.classList.remove('playing');
+                text.textContent = 'Play Music';
+            }
+        }
+    </script>
 </body>
 </html>
