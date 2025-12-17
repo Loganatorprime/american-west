@@ -574,6 +574,15 @@ h1, h2, h3, h4 {
     margin-bottom: 15px;
 }
 
+.legend-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    margin-bottom: 15px;
+}
+
 .card-front h3 {
     font-size: 1.5rem;
     color: var(--cream);
