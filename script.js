@@ -66,11 +66,15 @@ function initNavigation() {
         }
     });
 
-    // Smooth scroll for nav links
+    // Smooth scroll for nav links (only for anchor links)
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute('href');
+
+            // Only handle anchor links, let regular page links work normally
+            if (!targetId.startsWith('#')) return;
+
+            e.preventDefault();
             const targetSection = document.querySelector(targetId);
 
             if (targetSection) {
