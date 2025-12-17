@@ -67,7 +67,6 @@
             width: 100%;
             height: auto;
             display: block;
-            opacity: 0.95;
         }
 
         .markers-overlay {
@@ -257,6 +256,19 @@
             font-size: 1.1rem;
         }
 
+        .map-credit {
+            text-align: center;
+            margin-top: 15px;
+            font-family: 'IM Fell English', serif;
+            font-size: 0.85rem;
+            color: #b8860b;
+            font-style: italic;
+        }
+
+        .map-credit a {
+            color: #daa520;
+        }
+
         @media (max-width: 900px) {
             .info-panel {
                 position: fixed;
@@ -323,11 +335,10 @@
             <div class="map-frame">
                 <div class="map-wrapper">
                     <div class="map-image-container">
-                        <!-- Using a vintage-style map from Wikimedia Commons -->
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Map_of_USA_with_state_names.svg/1280px-Map_of_USA_with_state_names.svg.png"
-                             alt="Map of the Western United States"
-                             id="map-image"
-                             style="filter: sepia(40%) contrast(95%) brightness(105%);">
+                        <!-- 1883 Historical Map of the United States from Library of Congress -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Map_of_the_United_States_1883.jpg/1280px-Map_of_the_United_States_1883.jpg"
+                             alt="1883 Map of the United States"
+                             id="map-image">
 
                         <!-- Markers overlay -->
                         <div class="markers-overlay" id="markers-overlay">
@@ -344,6 +355,8 @@
                     </div>
                 </div>
             </div>
+
+            <p class="map-credit">Map: United States, 1883 - <a href="https://commons.wikimedia.org/wiki/File:Map_of_the_United_States_1883.jpg" target="_blank">Wikimedia Commons</a></p>
 
             <div class="legend">
                 <div class="legend-item">
@@ -443,105 +456,105 @@
     </style>
 
     <script>
+        // Marker positions calibrated to the 1883 map
         const locations = {
             promontory: {
                 title: "Promontory Summit, Utah",
                 type: "event",
-                // Percentage positions on the map
-                x: 22.5,
-                y: 35,
+                x: 23,
+                y: 42,
                 desc: "On May 10, 1869, the Central Pacific and Union Pacific railroads met here, completing the first Transcontinental Railroad. The famous Golden Spike ceremony united East and West, revolutionizing travel and commerce across America."
             },
             sutters: {
                 title: "Sutter's Mill, California",
                 type: "gold",
-                x: 11,
-                y: 40,
+                x: 13,
+                y: 45,
                 labelLeft: true,
                 desc: "On January 24, 1848, James W. Marshall discovered gold here, sparking the California Gold Rush. Within a year, over 300,000 '49ers' flooded into California, transforming the region and accelerating westward expansion."
             },
             tombstone: {
                 title: "Tombstone, Arizona",
                 type: "town",
-                x: 20,
+                x: 21,
                 y: 62,
                 desc: "Founded in 1879, Tombstone became one of the most famous mining towns of the Old West. It was here on October 26, 1881, that the Gunfight at the O.K. Corral took place between the Earp brothers and the Clanton-McLaury gang."
             },
             littlebighorn: {
                 title: "Little Bighorn, Montana",
                 type: "battle",
-                x: 28,
-                y: 22,
+                x: 27,
+                y: 28,
                 desc: "On June 25-26, 1876, Lt. Col. George Custer and his 7th Cavalry were defeated by Lakota, Northern Cheyenne, and Arapaho forces led by Sitting Bull and Crazy Horse. This battle marked the height of Native American resistance."
             },
             woundedknee: {
                 title: "Wounded Knee, South Dakota",
                 type: "battle",
-                x: 37,
-                y: 28,
+                x: 35,
+                y: 33,
                 desc: "On December 29, 1890, U.S. Army troops killed over 250 Lakota men, women, and children at Wounded Knee Creek. This tragic massacre effectively ended the Indian Wars and Native American armed resistance."
             },
             alamo: {
                 title: "The Alamo, Texas",
                 type: "battle",
-                x: 40,
-                y: 75,
+                x: 37,
+                y: 72,
                 desc: "From February 23 to March 6, 1836, approximately 200 Texan defenders held this former Spanish mission against thousands of Mexican troops. Though all defenders were killed, 'Remember the Alamo!' became a rallying cry for Texas independence."
             },
             dodge: {
                 title: "Dodge City, Kansas",
                 type: "town",
-                x: 40,
-                y: 45,
+                x: 38,
+                y: 48,
                 desc: "Known as the 'Wickedest Little City in America,' Dodge City was the quintessential cowtown of the 1870s-80s. At the end of the cattle drives on the Chisholm Trail, cowboys, gamblers, and gunslingers filled its famous saloons."
             },
             deadwood: {
                 title: "Deadwood, South Dakota",
                 type: "town",
-                x: 35,
-                y: 25,
+                x: 34,
+                y: 31,
                 desc: "Founded in 1876 during the Black Hills Gold Rush, Deadwood attracted fortune seekers, outlaws, and legends. Wild Bill Hickok was shot and killed here in 1876, and Calamity Jane made it her home."
             },
             denver: {
                 title: "Denver, Colorado",
                 type: "town",
                 x: 30,
-                y: 42,
+                y: 46,
                 desc: "Founded in 1858 during the Pike's Peak Gold Rush, Denver grew from a mining camp into the 'Queen City of the Plains.' It became a major supply hub for miners heading into the Rocky Mountains."
             },
             santafe: {
                 title: "Santa Fe, New Mexico",
                 type: "trail",
                 x: 27,
-                y: 55,
+                y: 56,
                 desc: "One of the oldest cities in the U.S., Santa Fe was the terminus of the famous Santa Fe Trail. This 900-mile trade route connected Missouri to the Southwest, bringing goods, settlers, and cultures together."
             },
             independence: {
                 title: "Independence, Missouri",
                 type: "trail",
-                x: 47,
-                y: 43,
+                x: 44,
+                y: 47,
                 desc: "Known as the 'Queen City of the Trails,' Independence was the starting point for the Oregon, California, and Santa Fe trails. Thousands of pioneers gathered here to stock up before their westward journey."
             },
             virginiacitynv: {
                 title: "Virginia City, Nevada",
                 type: "gold",
-                x: 14,
-                y: 38,
+                x: 16,
+                y: 43,
                 desc: "Site of the legendary Comstock Lode discovered in 1859, Virginia City became one of the richest silver mining towns in the West. At its peak, it was the most important city between Denver and San Francisco."
             },
             laramie: {
                 title: "Fort Laramie, Wyoming",
                 type: "trail",
-                x: 31,
-                y: 33,
+                x: 30,
+                y: 38,
                 desc: "Originally a fur trading post, Fort Laramie became a crucial supply stop and military outpost on the Oregon Trail. It was also the site of important treaties with Native American tribes."
             },
             sanfrancisco: {
                 title: "San Francisco, California",
                 type: "town",
-                x: 8,
-                y: 42,
+                x: 10,
+                y: 47,
                 labelLeft: true,
                 desc: "The Gold Rush transformed San Francisco from a small settlement into a booming city. By 1850, it was the largest city in the West, serving as the gateway for prospectors and the center of western commerce."
             }
