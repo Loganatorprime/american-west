@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legends of the West - The American West</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .legends-hero {
+            min-height: 50vh;
+            background: linear-gradient(to bottom, rgba(44, 36, 22, 0.85), rgba(139, 69, 19, 0.8)),
+                        linear-gradient(135deg, var(--rust-red) 0%, var(--sunset-orange) 50%, var(--desert-sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .legends-hero h1 {
+            font-size: 3.5rem;
+            color: var(--cream);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .legends-hero p {
+            color: var(--parchment);
+            font-size: 1.3rem;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .legends-content {
+            padding: 60px 0;
+            background: var(--parchment);
+        }
+
+        .category-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .category-title {
+            font-family: 'Rye', cursive;
+            font-size: 2.2rem;
+            color: var(--leather-brown);
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid var(--gold);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .category-title span {
+            display: inline-block;
+            padding: 0 20px;
+            background: var(--parchment);
+            position: relative;
+            top: 2px;
+        }
+
+        .legends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .legend-card {
+            background: var(--cream);
+            border: 4px solid var(--leather-brown);
+            box-shadow: 6px 6px 0 rgba(139, 69, 19, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .legend-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0 rgba(139, 69, 19, 0.3);
+        }
+
+        .legend-header {
+            padding: 20px;
+            background: var(--dark-wood);
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .legend-name {
+            font-family: 'Rye', cursive;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 0;
+        }
+
+        .legend-years {
+            color: var(--desert-sand);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .legend-body {
+            padding: 25px;
+        }
+
+        .legend-aka {
+            font-style: italic;
+            color: var(--rust-red);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .legend-desc {
+            color: var(--dark-wood);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .legend-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            font-family: 'Rye', cursive;
+            border: 2px solid;
+        }
+
+        .tag-outlaw {
+            background: #8b3a3a;
+            color: var(--cream);
+            border-color: #6b2a2a;
+        }
+
+        .tag-lawman {
+            background: var(--sage-green);
+            color: var(--dark-wood);
+            border-color: #6b8b6b;
+        }
+
+        .tag-warrior {
+            background: var(--sunset-orange);
+            color: var(--cream);
+            border-color: #c46a00;
+        }
+
+        .tag-pioneer {
+            background: var(--leather-brown);
+            color: var(--cream);
+            border-color: #6b4423;
+        }
+
+        .tag-showman {
+            background: var(--gold);
+            color: var(--dark-wood);
+            border-color: #b8860b;
+        }
+
+        .famous-quote {
+            background: var(--dark-wood);
+            padding: 40px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .famous-quote blockquote {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--cream);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .famous-quote cite {
+            display: block;
+            margin-top: 20px;
+            color: var(--gold);
+            font-family: 'Rye', cursive;
+            font-size: 1.1rem;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 50px 0;
+            color: var(--leather-brown);
+            font-size: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .legends-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .legends-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .famous-quote blockquote {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <span class="star">&#9733;</span>
+                <span>The American West</span>
+                <span class="star">&#9733;</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#timeline">Timeline</a></li>
+                <li><a href="map.html">Map</a></li>
+                <li><a href="legends.html">Legends</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="legends-hero">
+        <div class="container">
+            <h1>Legends of the West</h1>
+            <p>Heroes, Outlaws, and Icons Who Shaped the Frontier</p>
+        </div>
+    </section>
+
+    <main class="legends-content">
+        <!-- Outlaws Section -->
+        <section class="category-section">
+            <h2 class="category-title"><span>Notorious Outlaws</span></h2>
+            <div class="legends-grid">
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Jesse James</h3>
+                        <p class="legend-years">1847 - 1882</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"The Robin Hood of the West"</p>
+                        <p class="legend-desc">Leader of the James-Younger Gang, Jesse James became America's most famous outlaw. He robbed banks, trains, and stagecoaches across the Midwest. Killed by Robert Ford for a $10,000 reward.</p>
+                        <span class="legend-tag tag-outlaw">Outlaw</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Billy the Kid</h3>
+                        <p class="legend-years">1859 - 1881</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Born Henry McCarty, aka William H. Bonney</p>
+                        <p class="legend-desc">Legendary outlaw of the Lincoln County War. Said to have killed 21 men, one for each year of his life. Shot and killed by Sheriff Pat Garrett at age 21.</p>
+                        <span class="legend-tag tag-outlaw">Outlaw</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Butch Cassidy</h3>
+                        <p class="legend-years">1866 - 1908</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Born Robert LeRoy Parker</p>
+                        <p class="legend-desc">Leader of the Wild Bunch, the most successful train-robbing gang in history. Known for his charm and non-violent approach. Fled to South America with the Sundance Kid.</p>
+                        <span class="legend-tag tag-outlaw">Outlaw</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">John Wesley Hardin</h3>
+                        <p class="legend-years">1853 - 1895</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"The Deadliest Gunfighter"</p>
+                        <p class="legend-desc">Claimed to have killed over 40 men. A Texas gunfighter who started killing at age 15. Studied law in prison and became an attorney before being shot in El Paso.</p>
+                        <span class="legend-tag tag-outlaw">Outlaw</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="famous-quote">
+            <blockquote>
+                "There is no law west of St. Louis, and west of Dodge City there is no God."
+            </blockquote>
+            <cite>- Old Western Saying</cite>
+        </div>
+
+        <!-- Lawmen Section -->
+        <section class="category-section">
+            <h2 class="category-title"><span>Legendary Lawmen</span></h2>
+            <div class="legends-grid">
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Wyatt Earp</h3>
+                        <p class="legend-years">1848 - 1929</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"The Lion of Tombstone"</p>
+                        <p class="legend-desc">Frontier lawman famous for the Gunfight at the O.K. Corral. Served as deputy marshal in Dodge City and Tombstone. Survived the old West to die peacefully in Los Angeles at 80.</p>
+                        <span class="legend-tag tag-lawman">Lawman</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Wild Bill Hickok</h3>
+                        <p class="legend-years">1837 - 1876</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Born James Butler Hickok</p>
+                        <p class="legend-desc">Legendary gunfighter, lawman, and showman. Served as marshal in Abilene, Kansas. Shot in the back while playing poker in Deadwood, holding what became known as the "Dead Man's Hand."</p>
+                        <span class="legend-tag tag-lawman">Lawman</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Pat Garrett</h3>
+                        <p class="legend-years">1850 - 1908</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"The Man Who Killed Billy the Kid"</p>
+                        <p class="legend-desc">Lincoln County Sheriff who tracked down and killed Billy the Kid. Former buffalo hunter and bartender who became the most famous lawman in New Mexico Territory.</p>
+                        <span class="legend-tag tag-lawman">Lawman</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Bass Reeves</h3>
+                        <p class="legend-years">1838 - 1910</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"The Invincible Marshal"</p>
+                        <p class="legend-desc">Born into slavery, became one of the first Black deputy U.S. marshals west of the Mississippi. Arrested over 3,000 felons and was never wounded in 35 years of service.</p>
+                        <span class="legend-tag tag-lawman">Lawman</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">&#9733; &#9733; &#9733;</div>
+
+        <!-- Native American Leaders -->
+        <section class="category-section">
+            <h2 class="category-title"><span>Native American Warriors</span></h2>
+            <div class="legends-grid">
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Sitting Bull</h3>
+                        <p class="legend-years">c. 1831 - 1890</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Tatanka-Iyotanka, Hunkpapa Lakota</p>
+                        <p class="legend-desc">Holy man and leader who united the Lakota tribes against U.S. expansion. Led the resistance that defeated Custer at Little Bighorn. Later performed in Buffalo Bill's Wild West show.</p>
+                        <span class="legend-tag tag-warrior">Warrior Chief</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Crazy Horse</h3>
+                        <p class="legend-years">c. 1840 - 1877</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Tashunka Witko, Oglala Lakota</p>
+                        <p class="legend-desc">Legendary war leader who helped defeat Custer at Little Bighorn. Known for his bravery and mystical visions. Never photographed, never signed a treaty, never lived on a reservation.</p>
+                        <span class="legend-tag tag-warrior">Warrior Chief</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Geronimo</h3>
+                        <p class="legend-years">1829 - 1909</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Goyaale, Chiricahua Apache</p>
+                        <p class="legend-desc">Apache leader who fought against Mexico and the United States for decades. His resistance became legendary. The last Native American leader to formally surrender to U.S. forces in 1886.</p>
+                        <span class="legend-tag tag-warrior">Warrior Chief</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Chief Joseph</h3>
+                        <p class="legend-years">1840 - 1904</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Hin-mah-too-yah-lat-kekt, Nez Perce</p>
+                        <p class="legend-desc">Led his people on a 1,170-mile fighting retreat toward Canada. Famous for his surrender speech: "I will fight no more forever." Became an eloquent advocate for Native rights.</p>
+                        <span class="legend-tag tag-warrior">Warrior Chief</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="famous-quote">
+            <blockquote>
+                "I will fight no more forever."
+            </blockquote>
+            <cite>- Chief Joseph, 1877</cite>
+        </div>
+
+        <!-- Pioneers & Icons -->
+        <section class="category-section">
+            <h2 class="category-title"><span>Pioneers & Icons</span></h2>
+            <div class="legends-grid">
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Calamity Jane</h3>
+                        <p class="legend-years">1852 - 1903</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">Born Martha Jane Canary</p>
+                        <p class="legend-desc">Frontierswoman known for her sharpshooting, rough manner, and alleged romance with Wild Bill Hickok. Worked as a scout, ox-team driver, and performer. A true original of the Old West.</p>
+                        <span class="legend-tag tag-pioneer">Pioneer</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Buffalo Bill Cody</h3>
+                        <p class="legend-years">1846 - 1917</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">William Frederick Cody</p>
+                        <p class="legend-desc">Scout, bison hunter, and showman. Created Buffalo Bill's Wild West show, which toured for 30 years and shaped the world's image of the American frontier. Employed Sitting Bull and Annie Oakley.</p>
+                        <span class="legend-tag tag-showman">Showman</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Annie Oakley</h3>
+                        <p class="legend-years">1860 - 1926</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">"Little Sure Shot"</p>
+                        <p class="legend-desc">The most famous sharpshooter in the world. Star of Buffalo Bill's Wild West for 17 years. Could split a playing card edge-on and shoot dimes tossed in the air. A symbol of women's empowerment.</p>
+                        <span class="legend-tag tag-showman">Sharpshooter</span>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-header">
+                        <h3 class="legend-name">Doc Holliday</h3>
+                        <p class="legend-years">1851 - 1887</p>
+                    </div>
+                    <div class="legend-body">
+                        <p class="legend-aka">John Henry Holliday, D.D.S.</p>
+                        <p class="legend-desc">Dentist turned gambler and gunfighter. Best friend of Wyatt Earp and fought alongside him at the O.K. Corral. Suffered from tuberculosis and moved West seeking a cure. Died in a Colorado sanatorium.</p>
+                        <span class="legend-tag tag-pioneer">Gunfighter</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="star">&#9733;</span>
+                    <span>The American West</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <p>Exploring the history and legends of America's frontier</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="bg-music" loop>
+            <source src="https://archive.org/download/CowboyAndHoboSongs/01OldChisholmTrail.mp3" type="audio/mpeg">
+        </audio>
+        <button class="music-btn" id="music-btn" onclick="toggleMusic()">
+            <span class="music-icon">&#9835;</span>
+            <span class="music-text" id="music-text">Play Music</span>
+        </button>
+    </div>
+
+    <style>
+        .music-player { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .music-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--dark-wood); color: var(--gold); border: 3px solid var(--gold); font-family: 'Rye', cursive; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px 0 rgba(0,0,0,0.3); }
+        .music-btn:hover { background: var(--leather-brown); transform: translate(2px, 2px); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+        .music-btn.playing { background: var(--gold); color: var(--dark-wood); }
+        .music-icon { font-size: 1.2rem; }
+    </style>
+
+    <script>
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-btn');
+            const text = document.getElementById('music-text');
+            if (music.paused) { music.play(); btn.classList.add('playing'); text.textContent = 'Pause'; }
+            else { music.pause(); btn.classList.remove('playing'); text.textContent = 'Play Music'; }
+        }
+    </script>
+</body>
+</html>
